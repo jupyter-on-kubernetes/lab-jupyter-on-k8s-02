@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: notebook
+data:
+  jupyter_notebook_config.json: |-
+    {
+      "NotebookApp": {
+        "password": "sha1:cc569d299e95:c60dcd2ed070f2054c992b24f7ec6b2bf19d4762"
+      }
+    }

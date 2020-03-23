@@ -1,19 +1,19 @@
 apiVersion: training.eduk8s.io/v1alpha1
 kind: Workshop
 metadata:
-  name: lab-markdown-sample
+  name: lab-jupyter-on-k8s-02
 spec:
   vendor: eduk8s.io
-  title: Markdown Sample
-  description: A sample workshop using Markdown
-  url: https://github.com/eduk8s/lab-markdown-sample
-  #image: quay.io/eduk8s/lab-markdown-sample:master
-  content: github.com/eduk8s/lab-markdown-sample
-  duration: 15m
+  title: "Jupyter on Kubernetes #2"
+  description: A workshop exploring use of operators to deploy Jupyter notebooks to Kubernetes
+  url: https://github.com/eduk8s-tests/lab-jupyter-on-k8s-02
+  content: github.com/eduk8s-tests/lab-jupyter-on-k8s-02
+  duration: 30m
   session:
-    budget: small
+    budget: large
     applications:
       console:
         enabled: true
-      editor:
+      terminal:
         enabled: true
+        layout: split

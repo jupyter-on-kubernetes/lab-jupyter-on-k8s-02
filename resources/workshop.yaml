@@ -6,8 +6,8 @@ spec:
   vendor: eduk8s.io
   title: "Jupyter on Kubernetes #2"
   description: A workshop exploring use of operators to deploy Jupyter notebooks to Kubernetes
-  url: https://github.com/eduk8s-tests/lab-jupyter-on-k8s-02
-  content: github.com/eduk8s-tests/lab-jupyter-on-k8s-02
+  url: https://github.com/jupyter-on-kubernetes/lab-jupyter-on-k8s-02
+  content: github.com/jupyter-on-kubernetes/lab-jupyter-on-k8s-02
   duration: 30m
   session:
     budget: large

@@ -6,6 +6,6 @@ data:
   jupyter_notebook_config.json: |-
     {
       "NotebookApp": {
-        "password": "sha1:cc569d299e95:c60dcd2ed070f2054c992b24f7ec6b2bf19d4762"
+        "password": "sha1:9c2069f12451:2ce0e0fb5b5cfa44fe90e8f92f5b9153d988dbd2"
       }
     }

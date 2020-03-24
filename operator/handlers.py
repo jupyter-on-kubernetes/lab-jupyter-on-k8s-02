@@ -195,5 +195,5 @@ def create(name, uid, namespace, spec, logger, **_):
 
     return {
       "url": f"http://{ingress_hostname}",
-      "password": password_hash
+      "password": password
     }

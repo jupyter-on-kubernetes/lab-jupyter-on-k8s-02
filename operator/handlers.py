@@ -77,7 +77,7 @@ def create(name, uid, namespace, spec, logger, **_):
                     "labels": {
                         "deployment": name
                     }
-                }
+                },
                 "spec": {
                     "serviceAccountName": service_account,
                     "containers": [

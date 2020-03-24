@@ -39,7 +39,7 @@ def create(name, uid, namespace, spec, logger, **_):
             "jupyter_notebook_config.json" : """
                 {
                   "NotebookApp": {
-                    "password": %(password_hash)s
+                    "password": "%(password_hash)s"
                   }
                 }
             """ % dict(password_hash=password_hash)

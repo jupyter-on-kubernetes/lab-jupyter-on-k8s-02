@@ -170,20 +170,22 @@ def create(name, uid, namespace, spec, logger, **_):
             }
         },
         "spec": {
-            "rules": {
-                "host": ingress_hostname,
-                "http": {
-                    "paths": [
-                        {
-                            "path": "/",
-                            "backend": {
-                                "serviceName": name,
-                                "servicePort": 8888,
-                            },
-                        }
-                    ]
+            "rules": [
+                {
+                    "host": ingress_hostname,
+                    "http": {
+                        "paths": [
+                            {
+                                "path": "/",
+                                "backend": {
+                                    "serviceName": name,
+                                    "servicePort": 8888,
+                                },
+                            }
+                        ]
+                    }
                 }
-            }
+            ]
         }
     }
 

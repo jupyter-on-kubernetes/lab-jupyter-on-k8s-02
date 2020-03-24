@@ -1,0 +1,12 @@
+apiVersion: jupyter-on-kubernetes.test/v1alpha1
+kind: JupyterNotebook
+metadata:
+  name: notebook
+spec:
+  image: jupyter/minimal-notebook
+  serviceAccountName: default
+  resources:
+    requests:
+      storage: 1Gi
+    limits:
+      memory: 512Mi

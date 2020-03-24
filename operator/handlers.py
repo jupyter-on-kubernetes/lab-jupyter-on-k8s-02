@@ -61,7 +61,7 @@ def create(name, uid, namespace, spec, logger, **_):
             "labels": {
                 "app": name
             }
-        }
+        },
         "spec": {
             "replicas": 1,
             "selector": {
@@ -137,7 +137,7 @@ def create(name, uid, namespace, spec, logger, **_):
             "labels": {
                 "app": name
             }
-        }
+        },
         "spec": {
             "type": "ClusterIP",
             "ports": [

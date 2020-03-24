@@ -114,7 +114,9 @@ def create(name, uid, namespace, spec, logger, **_):
                     "volumes": [
                         {
                             "name": "config",
-                            "configMap": "notebook"
+                            "configMap": {
+                                "name": "notebook"
+                            }
                         }
                     ]
                 },

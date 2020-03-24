@@ -17,9 +17,12 @@ def create(name, uid, namespace, spec, logger, **_):
     algorithm = 'sha1'
     salt_len = 12
 
+    characters = string.ascii_letters + string.digits
+    password = "".join(random.sample(characters, 16))
+
     h = hashlib.new(algorithm)
     salt = ('%0' + str(salt_len) + 'x') % random.getrandbits(4 * salt_len)
-    h.update(bytes(passphrase, 'utf-8') + salt.encode('ascii'))
+    h.update(bytes(password, 'utf-8') + salt.encode('ascii'))
 
     password_hash = ':'.join((algorithm, salt, h.hexdigest()))
 

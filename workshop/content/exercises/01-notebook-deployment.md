@@ -16,7 +16,7 @@ notebook-v1/service.yaml
 notebook-v1/ingress.yaml
 ```
 
-The config map included the ``jupyter_notebook_config.json`` file, and which set the password for accessing the Jupyter notebook application.
+The config map included the ``jupyter_notebook_config.json`` file and was used to set the password for accessing the Jupyter notebook application.
 
 ```execute
 cat notebook-v1/configmap.yaml

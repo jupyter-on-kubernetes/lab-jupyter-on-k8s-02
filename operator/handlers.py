@@ -159,7 +159,7 @@ def create(name, uid, namespace, spec, logger, **_):
     core_api.create_namespaced_service(namespace=namespace, body=service_body)
 
     ingress_domain = os.environ.get("INGRESS_DOMAIN")
-    ingress_hostname = f"notebook-{namespace}.{ingress_domain}")
+    ingress_hostname = f"notebook-{namespace}.{ingress_domain}"
 
     ingress_body = {
         "apiVersion": "extensions/v1beta1",

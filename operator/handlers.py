@@ -106,13 +106,13 @@ def create(name, uid, namespace, spec, logger, **_):
                                     "value": "true",
                                 },
                             ],
-                        },
-                        "volumeMounts": [
-                            {
-                                "name": "config",
-                                "mountPath": "/home/jovyan/.jupyter"
-                            }
-                        ]
+                            "volumeMounts": [
+                                {
+                                    "name": "config",
+                                    "mountPath": "/home/jovyan/.jupyter"
+                                }
+                            ]
+                        }
                     ],
                     "volumes": [
                         {

@@ -31,7 +31,7 @@ def create(name, uid, namespace, spec, logger, **_):
             "labels": {
                 "app": name
             }
-        }
+        },
         "data": {
             "jupyter_notebook_config.json" : f"""
                 {

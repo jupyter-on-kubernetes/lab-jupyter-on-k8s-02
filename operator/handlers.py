@@ -14,7 +14,7 @@ default_config_file = '/etc/jupyter/jupyter_notebook_config.py'
 
 if os.path.exists(default_config_file):
     with open(default_config_file) as fp:
-        exec(compile(fp.read(), image_config_file, 'exec'), globals())
+        exec(compile(fp.read(), default_config_file, 'exec'), globals())
 
 c.NotebookApp.password = "%(password_hash)s"
 

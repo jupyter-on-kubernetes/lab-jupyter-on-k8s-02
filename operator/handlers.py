@@ -162,7 +162,7 @@ def create(name, uid, namespace, spec, logger, **_):
 
         persistent_volume_claim_body = {
             "apiVersion": "v1",
-            "kind": "Service",
+            "kind": "PersistentVolumeClaim",
             "metadata": {
                 "name": name,
                 "labels": {

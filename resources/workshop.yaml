@@ -140,6 +140,11 @@ spec:
                           type: string
                         storage:
                           type: string
+                notebook:
+                  type: object
+                  properties:
+                    interface:
+                      type: string
             status:
               type: object
         additionalPrinterColumns:

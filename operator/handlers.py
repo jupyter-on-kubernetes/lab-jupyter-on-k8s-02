@@ -57,6 +57,8 @@ def create(name, uid, namespace, spec, logger, **_):
     memory_limit = spec.get("resources", {}).get("limits", {}).get("memory", "512Mi")
     memory_request = spec.get("resources", {}).get("requests", {}).get("memory", memory_limit)
 
+    notebook_interface = spec.get("notebook", {}).get("interface", "lab")
+
     deployment_body = {
         "apiVersion": "apps/v1",
         "kind": "Deployment",
@@ -104,12 +106,7 @@ def create(name, uid, namespace, spec, logger, **_):
                                     "protocol": "TCP",
                                 }
                             ],
-                            "env": [
-                                {
-                                    "name": "JUPYTER_ENABLE_LAB",
-                                    "value": "true",
-                                },
-                            ],
+                            "env": []
                             "volumeMounts": [
                                 {
                                     "name": "config",
@@ -133,6 +130,10 @@ def create(name, uid, namespace, spec, logger, **_):
             },
         },
     }
+
+    if notebook_interface != "classic":
+        deployment_body["spec"]["template"]["spec"]["containers"][0]["env"].append(
+                {"name": "JUPYTER_ENABLE_LAB", "value": "true"})
 
     kopf.adopt(deployment_body)
 

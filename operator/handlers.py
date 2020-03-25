@@ -154,7 +154,7 @@ def create(name, uid, namespace, spec, logger, **_):
     volume_request = spec.get("resources", {}).get("requests", {}).get("storage")
 
     if volume_request or volume_limit:
-        volume = {"name": "data", "persistentVolumeClaim": {"claimName": notebook}}
+        volume = {"name": "data", "persistentVolumeClaim": {"claimName": "notebook"}}
         deployment_body["spec"]["template"]["spec"]["volumes"].append(volume)
 
         volume_mount = {"name": "data", "mountPath": "/home/jovyan"}

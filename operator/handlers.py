@@ -10,19 +10,19 @@ import kubernetes.client
 notebook_config = """
 import os
 
-default_config_file = '/etc/jupyter/jupyter_notebook_config.py'
+default_config_file = "/etc/jupyter/jupyter_notebook_config.py"
 
 if os.path.exists(default_config_file):
     with open(default_config_file) as fp:
-        exec(compile(fp.read(), default_config_file, 'exec'), globals())
+        exec(compile(fp.read(), default_config_file, "exec"), globals())
 
 c.NotebookApp.password = "%(password_hash)s"
 
-user_config_file = '/home/jovyan/.jupyter/jupyter_notebook_config.py'
+user_config_file = "/home/jovyan/.jupyter/jupyter_notebook_config.py"
 
 if os.path.exists(user_config_file):
     with open(user_config_file) as fp:
-        exec(compile(fp.read(), user_config_file, 'exec'), globals())
+        exec(compile(fp.read(), user_config_file, "exec"), globals())
 """
 
 @kopf.on.create("jupyter-on-kubernetes.test", "v1alpha1", "jupyternotebooks")
@@ -31,17 +31,17 @@ def create(name, uid, namespace, spec, logger, **_):
     core_api = kubernetes.client.CoreV1Api()
     extensions_api = kubernetes.client.ExtensionsV1beta1Api()
 
-    algorithm = 'sha1'
+    algorithm = "sha1"
     salt_len = 12
 
     characters = string.ascii_letters + string.digits
     password = "".join(random.sample(characters, 16))
 
     h = hashlib.new(algorithm)
-    salt = ('%0' + str(salt_len) + 'x') % random.getrandbits(4 * salt_len)
-    h.update(bytes(password, 'utf-8') + salt.encode('ascii'))
+    salt = ("%0" + str(salt_len) + "x") % random.getrandbits(4 * salt_len)
+    h.update(bytes(password, "utf-8") + salt.encode("ascii"))
 
-    password_hash = ':'.join((algorithm, salt, h.hexdigest()))
+    password_hash = ":".join((algorithm, salt, h.hexdigest()))
 
     config_map_body = {
         "apiVersion": "v1",

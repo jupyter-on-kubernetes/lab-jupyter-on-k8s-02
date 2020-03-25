@@ -8,11 +8,19 @@ import kubernetes
 import kubernetes.client
 
 notebook_config = """
-{
-  "NotebookApp": {
-    "password": "%(password_hash)s"
-  }
-}
+default_config_file = '/etc/jupyter/jupyter_notebook_config.py'
+
+if os.path.exists(default_config_file):
+    with open(default_config_file) as fp:
+        exec(compile(fp.read(), image_config_file, 'exec'), globals())
+
+c.NotebookApp.password = "%(password_hash)s"
+
+user_config_file = '/home/jovyan/.jupyter/jupyter_notebook_config.py'
+
+if os.path.exists(user_config_file):
+    with open(user_config_file) as fp:
+        exec(compile(fp.read(), user_config_file, 'exec'), globals())
 """
 
 @kopf.on.create("jupyter-on-kubernetes.test", "v1alpha1", "jupyternotebooks")
@@ -43,7 +51,7 @@ def create(name, uid, namespace, spec, logger, **_):
             }
         },
         "data": {
-            "jupyter_notebook_config.json" : notebook_config % dict(password_hash=password_hash)
+            "jupyter_notebook_config.py" : notebook_config % dict(password_hash=password_hash)
         }
     }
 
@@ -91,6 +99,11 @@ def create(name, uid, namespace, spec, logger, **_):
                             "name": "notebook",
                             "image": image,
                             "imagePullPolicy": "Always",
+                            "args": [
+                              "start-notebook.sh",
+                              "--config",
+                              "/var/run/jupyter/jupyter_notebook_config.py"
+                            ],
                             "resources": {
                                 "requests": {
                                     "memory": memory_request
@@ -110,7 +123,7 @@ def create(name, uid, namespace, spec, logger, **_):
                             "volumeMounts": [
                                 {
                                     "name": "config",
-                                    "mountPath": "/home/jovyan/.jupyter"
+                                    "mountPath": "/var/run/jupyter"
                                 }
                             ]
                         }

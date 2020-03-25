@@ -7,6 +7,13 @@ import kopf
 import kubernetes
 import kubernetes.client
 
+notebook_config = """
+{
+  "NotebookApp": {
+    "password": "%(password_hash)s"
+  }
+}
+"""
 
 @kopf.on.create("jupyter-on-kubernetes.test", "v1alpha1", "jupyternotebooks")
 def create(name, uid, namespace, spec, logger, **_):
@@ -36,7 +43,7 @@ def create(name, uid, namespace, spec, logger, **_):
             }
         },
         "data": {
-            "jupyter_notebook_config.json" : """{"NotebookApp": {"password": "%(password_hash)s"}}""" % dict(password_hash=password_hash)
+            "jupyter_notebook_config.json" : notebook_config % dict(password_hash=password_hash)
         }
     }
 

@@ -106,7 +106,7 @@ def create(name, uid, namespace, spec, logger, **_):
                                     "protocol": "TCP",
                                 }
                             ],
-                            "env": []
+                            "env": [],
                             "volumeMounts": [
                                 {
                                     "name": "config",

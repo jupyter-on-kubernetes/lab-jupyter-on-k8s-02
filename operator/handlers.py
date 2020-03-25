@@ -8,6 +8,8 @@ import kubernetes
 import kubernetes.client
 
 notebook_config = """
+import os
+
 default_config_file = '/etc/jupyter/jupyter_notebook_config.py'
 
 if os.path.exists(default_config_file):

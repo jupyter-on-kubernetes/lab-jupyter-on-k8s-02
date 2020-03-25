@@ -64,10 +64,10 @@ def create(name, uid, namespace, spec, logger, **_):
     image = spec.get("image", "jupyter/minimal-notebook:latest")
     service_account = spec.get("serviceAccountName", "default")
 
+    notebook_interface = spec.get("notebook", {}).get("interface", "lab")
+
     memory_limit = spec.get("resources", {}).get("limits", {}).get("memory", "512Mi")
     memory_request = spec.get("resources", {}).get("requests", {}).get("memory", memory_limit)
-
-    notebook_interface = spec.get("notebook", {}).get("interface", "lab")
 
     deployment_body = {
         "apiVersion": "apps/v1",
@@ -149,6 +149,44 @@ def create(name, uid, namespace, spec, logger, **_):
     if notebook_interface != "classic":
         deployment_body["spec"]["template"]["spec"]["containers"][0]["env"].append(
                 {"name": "JUPYTER_ENABLE_LAB", "value": "true"})
+
+    volume_limit = spec.get("resources", {}).get("limits", {}).get("storage")
+    volume_request = spec.get("resources", {}).get("requests", {}).get("storage")
+
+    if volume_request or volume_limit:
+        volume = {"name": "data", "persistentVolumeClaim": {"claimName": notebook}}
+        deployment_body["spec"]["template"]["spec"]["volumes"].append(volume)
+
+        volume_mount = {"name": "data", "mountPath": "/home/jovyan"}
+        deployment_body["spec"]["template"]["spec"]["containers"][0]["volumeMounts"].append(volume_mount)
+
+        persistent_volume_claim_body = {
+            "apiVersion": "v1",
+            "kind": "Service",
+            "metadata": {
+                "name": name,
+                "labels": {
+                    "app": name
+                }
+            },
+            "spec": {
+                "accessModes": ["ReadWriteOnce"],
+                "resources": {
+                    "requests": [],
+                    "limits": []
+                }
+            }
+        }
+
+        if volume_request:
+            persistent_volume_claim_body["spec"]["resources"]["requests"]["storage"] = volume_request
+
+        if volume_limit:
+            persistent_volume_claim_body["spec"]["resources"]["limits"]["storage"] = volume_limit
+        kopf.adopt(persistent_volume_claim_body)
+
+        core_api.create_namespaced_persistent_volume_claim(namespace=namespace,
+                body=persistent_volume_claim_body)
 
     kopf.adopt(deployment_body)
 

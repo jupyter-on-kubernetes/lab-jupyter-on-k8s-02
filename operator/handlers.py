@@ -172,7 +172,7 @@ def create(name, uid, namespace, spec, logger, **_):
             "spec": {
                 "accessModes": ["ReadWriteOnce"],
                 "resources": {
-                    "requests": {}
+                    "requests": {},
                     "limits": {}
                 }
             }

@@ -118,6 +118,9 @@ def create(name, uid, namespace, spec, logger, **_):
                             ]
                         }
                     ],
+                    "securityContext": {
+                        "fsGroup": 0
+                    },
                     "volumes": [
                         {
                             "name": "config",

@@ -47,3 +47,9 @@ The password for the Jupyter notebook will be:
 ```copy
 jupyter
 ```
+
+When done verifying the deployment worked, delete all the resources created by running:
+
+```execute
+kubectl delete all,configmap,pvc,ingress -l all
+```

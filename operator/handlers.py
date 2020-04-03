@@ -39,6 +39,17 @@ pkgs_dirs:
 EOF
 fi
 
+if [ ! -f $HOME/.jupyter/jupyter_notebook_config.json ]; then
+    mkdir -p $HOME/.jupyter
+    cat > $HOME/.jupyter/jupyter_notebook_config.json << EOF
+{
+  "NotebookApp": {
+    "password": "%(password_hash)s"
+  }
+}
+EOF
+fi
+
 if [ ! -d $HOME/.conda/envs/workspace ]; then
     echo "Creating virtual environment 'workspace'."
     conda create --name workspace --clone base
@@ -77,7 +88,7 @@ def create(name, uid, namespace, spec, logger, **_):
         },
         "data": {
             "jupyter_notebook_config.py" : notebook_config % dict(password_hash=password_hash),
-            "before-notebook.sh": notebook_startup
+            "before-notebook.sh": notebook_startup % dict(password_hash=password_hash)
         }
     }
 
@@ -125,11 +136,11 @@ def create(name, uid, namespace, spec, logger, **_):
                             "name": "notebook",
                             "image": image,
                             "imagePullPolicy": "Always",
-                            "args": [
-                              "start-notebook.sh",
-                              "--config",
-                              "/var/run/jupyter/jupyter_notebook_config.py"
-                            ],
+                            #"args": [
+                            #  "start-notebook.sh",
+                            #  "--config",
+                            #  "/var/run/jupyter/jupyter_notebook_config.py"
+                            #],
                             "resources": {
                                 "requests": {
                                     "memory": memory_request

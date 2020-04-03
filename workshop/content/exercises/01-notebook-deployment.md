@@ -51,5 +51,5 @@ jupyter
 When done verifying the deployment worked, delete all the resources created by running:
 
 ```execute
-kubectl delete all,configmap,pvc,ingress -l all
+kubectl delete all,configmap,pvc,ingress -l app=notebook
 ```

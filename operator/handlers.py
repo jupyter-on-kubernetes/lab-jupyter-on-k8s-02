@@ -154,8 +154,10 @@ def create(name, uid, namespace, spec, logger, **_):
                             "configMap": {
                                 "name": "notebook",
                                 "items": [
-                                    "key": "jupyter_notebook_config.py",
-                                    "path": "jupyter_notebook_config.py",
+                                    {
+                                        "key": "jupyter_notebook_config.py",
+                                        "path": "jupyter_notebook_config.py",
+                                    }
                                 ]
                             }
                         },
@@ -164,9 +166,11 @@ def create(name, uid, namespace, spec, logger, **_):
                             "configMap": {
                                 "name": "notebook",
                                 "items": [
-                                    "key": "before-notebook.sh",
-                                    "path": "before-notebook.sh",
-                                    "mode": 0755
+                                    {
+                                        "key": "before-notebook.sh",
+                                        "path": "before-notebook.sh",
+                                        "mode": 0755
+                                    }
                                 ]
                             }
                         }

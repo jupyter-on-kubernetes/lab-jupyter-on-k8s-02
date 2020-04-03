@@ -7,24 +7,6 @@ import kopf
 import kubernetes
 import kubernetes.client
 
-notebook_config = """
-import os
-
-default_config_file = "/etc/jupyter/jupyter_notebook_config.py"
-
-if os.path.exists(default_config_file):
-    with open(default_config_file) as fp:
-        exec(compile(fp.read(), default_config_file, "exec"), globals())
-
-c.NotebookApp.password = "%(password_hash)s"
-
-user_config_file = "/home/jovyan/.jupyter/jupyter_notebook_config.py"
-
-if os.path.exists(user_config_file):
-    with open(user_config_file) as fp:
-        exec(compile(fp.read(), user_config_file, "exec"), globals())
-"""
-
 notebook_startup = """#!/bin/bash
 conda init
 
@@ -36,6 +18,7 @@ envs_dirs:
   - /home/jovyan/.conda/envs
 pkgs_dirs:
   - /home/jovyan/.conda/pkgs
+  - /opt/conda/pkgs
 EOF
 fi
 
@@ -87,7 +70,6 @@ def create(name, uid, namespace, spec, logger, **_):
             }
         },
         "data": {
-            "jupyter_notebook_config.py" : notebook_config % dict(password_hash=password_hash),
             "before-notebook.sh": notebook_startup % dict(password_hash=password_hash)
         }
     }
@@ -136,11 +118,6 @@ def create(name, uid, namespace, spec, logger, **_):
                             "name": "notebook",
                             "image": image,
                             "imagePullPolicy": "Always",
-                            #"args": [
-                            #  "start-notebook.sh",
-                            #  "--config",
-                            #  "/var/run/jupyter/jupyter_notebook_config.py"
-                            #],
                             "resources": {
                                 "requests": {
                                     "memory": memory_request
@@ -159,10 +136,6 @@ def create(name, uid, namespace, spec, logger, **_):
                             "env": [],
                             "volumeMounts": [
                                 {
-                                    "name": "config",
-                                    "mountPath": "/var/run/jupyter"
-                                },
-                                {
                                     "name": "startup",
                                     "mountPath": "/usr/local/bin/before-notebook.d"
                                 }
@@ -174,28 +147,9 @@ def create(name, uid, namespace, spec, logger, **_):
                     },
                     "volumes": [
                         {
-                            "name": "config",
-                            "configMap": {
-                                "name": "notebook",
-                                "items": [
-                                    {
-                                        "key": "jupyter_notebook_config.py",
-                                        "path": "jupyter_notebook_config.py",
-                                    }
-                                ]
-                            }
-                        },
-                        {
                             "name": "startup",
                             "configMap": {
-                                "name": "notebook",
-                                "items": [
-                                    {
-                                        "key": "before-notebook.sh",
-                                        "path": "before-notebook.sh",
-                                        "mode": 0o755
-                                    }
-                                ]
+                                "name": "notebook"
                             }
                         }
                     ]

@@ -2,6 +2,8 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: notebook
+  labels:
+    app: notebook
 data:
   jupyter_notebook_config.json: |-
     {

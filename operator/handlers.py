@@ -25,6 +25,16 @@ if os.path.exists(user_config_file):
         exec(compile(fp.read(), user_config_file, "exec"), globals())
 """
 
+notebook_startup = """#!/bin/bash
+
+if [ -d $HOME/.conda/envs/workspace ]; then
+    echo "Activate virtual environment 'workspace'."
+    conda init
+    source $HOME/.bashrc
+    conda activate workspace
+fi
+"""
+
 @kopf.on.create("jupyter-on-kubernetes.test", "v1alpha1", "jupyternotebooks")
 def create(name, uid, namespace, spec, logger, **_):
     apps_api = kubernetes.client.AppsV1Api()
@@ -53,7 +63,8 @@ def create(name, uid, namespace, spec, logger, **_):
             }
         },
         "data": {
-            "jupyter_notebook_config.py" : notebook_config % dict(password_hash=password_hash)
+            "jupyter_notebook_config.py" : notebook_config % dict(password_hash=password_hash),
+            "before-notebook.sh": notebook_startup
         }
     }
 
@@ -126,6 +137,10 @@ def create(name, uid, namespace, spec, logger, **_):
                                 {
                                     "name": "config",
                                     "mountPath": "/var/run/jupyter"
+                                },
+                                {
+                                    "name": "startup",
+                                    "mountPath": "/usr/local/bin/before-notebook.d"
                                 }
                             ]
                         }
@@ -137,7 +152,22 @@ def create(name, uid, namespace, spec, logger, **_):
                         {
                             "name": "config",
                             "configMap": {
-                                "name": "notebook"
+                                "name": "notebook",
+                                "items": [
+                                    "key": "jupyter_notebook_config.py",
+                                    "path": "jupyter_notebook_config.py",
+                                ]
+                            }
+                        },
+                        {
+                            "name": "startup",
+                            "configMap": {
+                                "name": "notebook",
+                                "items": [
+                                    "key": "before-notebook.sh",
+                                    "path": "before-notebook.sh",
+                                    "mode": 0755
+                                ]
                             }
                         }
                     ]
@@ -231,6 +261,9 @@ def create(name, uid, namespace, spec, logger, **_):
             "name": name,
             "labels": {
                 "app": name
+            },
+            "annotations": {
+                "projectcontour.io/websocket-routes": "/"
             }
         },
         "spec": {

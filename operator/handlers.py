@@ -169,7 +169,7 @@ def create(name, uid, namespace, spec, logger, **_):
                                     {
                                         "key": "before-notebook.sh",
                                         "path": "before-notebook.sh",
-                                        "mode": 0755
+                                        "mode": 0o755
                                     }
                                 ]
                             }

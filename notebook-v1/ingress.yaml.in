@@ -4,6 +4,8 @@ metadata:
   name: notebook
   labels:
     app: notebook
+  annotations:
+    projectcontour.io/websocket-routes: /
 spec:
   rules:
   - host: notebook-${SESSION_NAMESPACE}.${INGRESS_DOMAIN}

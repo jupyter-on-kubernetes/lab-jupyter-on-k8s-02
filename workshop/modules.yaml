@@ -7,6 +7,10 @@ modules:
         exit_sign: Start Workshop
     exercises/01-notebook-deployment:
         name: Notebook Deployment
+    exercises/02-custom-resources:
+        name: Custom Resources
+    exercises/03-operator-implementation:
+        name: Operator Implementation
     workshop-summary:
         name: Workshop Summary
         exit_sign: Finish Workshop

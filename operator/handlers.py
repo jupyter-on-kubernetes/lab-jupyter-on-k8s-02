@@ -26,6 +26,10 @@ if os.path.exists(user_config_file):
 """
 
 notebook_startup = """#!/bin/bash
+conda init
+
+source $HOME/.bashrc
+
 if [ ! -f $HOME/.condarc ]; then
     cat > $HOME/.condarc << EOF
 envs_dirs:
@@ -35,13 +39,13 @@ pkgs_dirs:
 EOF
 fi
 
-if [ -d $HOME/.conda/envs/workspace ]; then
-    echo "Activate virtual environment 'workspace'."
-    conda init
-    source $HOME/.bashrc
-    conda activate workspace
-    echo "Using: `which jupyter`"
+if [ ! -d $HOME/.conda/envs/workspace ]; then
+    echo "Creating virtual environment 'workspace'."
+    conda create --name workspace --clone base
 fi
+
+echo "Activate virtual environment 'workspace'."
+conda activate workspace
 """
 
 @kopf.on.create("jupyter-on-kubernetes.test", "v1alpha1", "jupyternotebooks")

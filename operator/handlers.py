@@ -33,13 +33,10 @@ if [ ! -f $HOME/.jupyter/jupyter_notebook_config.json ]; then
 EOF
 fi
 
-if [ ! -d $HOME/.conda/envs/workspace ]; then
-    echo "Creating virtual environment 'workspace'."
-    conda create --name workspace --clone base
+if [ -d $HOME/.conda/envs/workspace ]; then
+    echo "Activate virtual environment 'workspace'."
+    conda activate workspace
 fi
-
-echo "Activate virtual environment 'workspace'."
-conda activate workspace
 """
 
 @kopf.on.create("jupyter-on-kubernetes.test", "v1alpha1", "jupyternotebooks")

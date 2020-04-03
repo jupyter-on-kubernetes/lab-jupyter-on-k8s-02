@@ -26,6 +26,14 @@ if os.path.exists(user_config_file):
 """
 
 notebook_startup = """#!/bin/bash
+if [ ! -f $HOME/.condarc ]; then
+    cat > $HOME/.condarc << EOF
+envs_dirs:
+  - /home/jovyan/.conda/envs
+pkgs_dirs:
+  - /home/jovyan/.conda/pkgs
+EOF
+fi
 
 if [ -d $HOME/.conda/envs/workspace ]; then
     echo "Activate virtual environment 'workspace'."

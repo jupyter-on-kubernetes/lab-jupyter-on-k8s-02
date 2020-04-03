@@ -32,6 +32,7 @@ if [ -d $HOME/.conda/envs/workspace ]; then
     conda init
     source $HOME/.bashrc
     conda activate workspace
+    echo "Using: `which jupyter`"
 fi
 """
 

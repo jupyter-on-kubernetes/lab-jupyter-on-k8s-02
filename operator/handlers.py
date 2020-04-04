@@ -16,9 +16,6 @@ if [ ! -f $HOME/.condarc ]; then
     cat > $HOME/.condarc << EOF
 envs_dirs:
   - /home/jovyan/.conda/envs
-pkgs_dirs:
-  - /home/jovyan/.conda/pkgs
-  - /opt/conda/pkgs
 EOF
 fi
 

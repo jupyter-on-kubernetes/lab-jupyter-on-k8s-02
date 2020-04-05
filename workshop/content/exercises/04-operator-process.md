@@ -1,0 +1,19 @@
+The purpose of a Kubernetes operator is to monitor a set of custom resources and take appropriate actions when one of the custom resources is created, updated or deleted.
+
+The operator is no different to any other workload deployed to a Kubernetes cluster in as much as it is packaged as a container image and deployed to the cluster, running in a container of a pod.
+
+That said, in this workshop environment, rather than have the operator we are relying on deployed once to the cluster, with it monitoring the whole cluster for changes to the custom resources it is interested in, your workshop environment has its own deployment of the operator and it is monitoring only the namespace provided to you for the workshop. The operator process is actually running out of the same container this workshop environment is running.
+
+To view the source code for the operator, run:
+
+```execute
+cat operator/handlers.py
+```
+
+or use the **Editor** embedded in the workshop dashboard to open the ``operator/handlers.py`` file.
+
+The operator in question is implemented in the Python programming language and uses the [kopf](https://kopf.readthedocs.io/) framework.
+
+As far as operators goes, this operator for handling deployment of Jupyter notebooks is quite simple. It will react to the creation of a custom resources of type ``JupyterNotebook`` and create the required resources to deploy the Jupyter notebook. Once those resources are created, the operator takes no further interest in the custom resource or the resources created in response.
+
+In other words, unlike many other operators, it doesn't implement a continual process of reconciliation to ensure that the deployment matches details specified in the custom resource. Thus, even if you were to modify the custom resource to increase the memory to be allocated to the container, the operator will not change the deployment to match. This removes a lot of the complexity that arises in the implementation on an operator, and for this use case isn't a requirement.

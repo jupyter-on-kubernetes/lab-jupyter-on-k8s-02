@@ -12,11 +12,13 @@ spec:
   session:
     budget: large
     applications:
-      console:
-        enabled: true
       terminal:
         enabled: true
         layout: split
+      console:
+        enabled: true
+      editor:
+        enabled: true
     objects:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: Role

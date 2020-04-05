@@ -64,7 +64,7 @@ def create(name, uid, namespace, spec, logger, **_):
             }
         },
         "data": {
-            "before-notebook.sh": notebook_startup % dict(password_hash=password_hash)
+            "setup-environment.sh": notebook_startup % dict(password_hash=password_hash)
         }
     }
 

@@ -25,7 +25,7 @@ spec:
       memory: 512Mi
 ```
 
-This custom resources says that we want to create a deployment of a Jupyter notebook called ``notebook`` and that it should use the ``jupyter/minimal-notebook`` image from the set of official Jupyter notebook images from the Jupyter project.
+This custom resource says that we want to create a deployment of a Jupyter notebook called ``notebook`` and that it should use the ``jupyter/minimal-notebook`` image from the set of official Jupyter notebook images from the Jupyter project.
 
 The definition also indicates we want 512Mi of memory allocated to run the Jupyter notebook, and that 1Gi of persistent storage should be allocated and mounted into the container for the Jupyter notebook to hold any notebooks and data files.
 

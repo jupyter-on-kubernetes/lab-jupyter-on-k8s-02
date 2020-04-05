@@ -1,0 +1,70 @@
+In the original deployment from the last workshop, the password for accessing the Jupyter notebook was generated locally and included in a config map which was then mounted into the Jupyter notebook container. With the way that this was done, to change the password you would need to update the config map and restart the Jupyter notebook container.
+
+With the custom operator being used know, a different approach is used. Instead of creating a config map with the ``jupyter_notebook_config.json`` file embedded in it, and mounting it into the container, a startup script is instead used to generate the file when the container is started.
+
+To view this startup script as embedded in the config map, run:
+
+```execute
+kubectl get configmap/notebook -o json | jq -r '.data["setup-environment.sh"]'
+```
+
+The output should be similar to:
+
+```
+#!/bin/bash
+conda init
+
+source $HOME/.bashrc
+
+if [ ! -f $HOME/.condarc ]; then
+    cat > $HOME/.condarc << EOF
+envs_dirs:
+  - /home/jovyan/.conda/envs
+EOF
+fi
+
+if [ ! -f $HOME/.jupyter/jupyter_notebook_config.json ]; then
+    mkdir -p $HOME/.jupyter
+    cat > $HOME/.jupyter/jupyter_notebook_config.json << EOF
+{
+  "NotebookApp": {
+    "password": "sha1:e5ede71879ce:868508dfcc3496993a21c438dba73209791a9c38"
+  }
+}
+EOF
+fi
+
+if [ -d $HOME/.conda/envs/workspace ]; then
+    echo "Activate virtual environment 'workspace'."
+    conda activate workspace
+fi
+```
+
+This script is mounted into the container so that it appears at the location:
+
+```
+/usr/local/bin/before-notebook.d/setup-environment.sh
+```
+
+The ``before-notebook.d`` directory is special to the script that starts the Jupyter notebook, and any script files in the directory will be run and the environment incorporated into that of the start up script so it is inherited by the Jupyter notebook.
+
+The ``setup-environment.sh`` script does a few different things, but what we want to focus on first is that part dealing with setting up access controls.
+
+```
+if [ ! -f $HOME/.jupyter/jupyter_notebook_config.json ]; then
+    mkdir -p $HOME/.jupyter
+    cat > $HOME/.jupyter/jupyter_notebook_config.json << EOF
+{
+  "NotebookApp": {
+    "password": "sha1:e5ede71879ce:868508dfcc3496993a21c438dba73209791a9c38"
+  }
+}
+EOF
+fi
+```
+
+What this does is if the ``jupyter_notebook_config.json`` file doesn't already exist, it will be created. The hash value for the password, will be that corresponding to the password viewable when getting details of the custom resource.
+
+Because the config file isn't updated if it already exists, it means that this mechanism is only used to set the initial password. If you are deploying the Jupyter notebook with persistent storage attached, you can use the ``jupyter notebook password`` command from a terminal within the Jupyter notebook web interface, to change the password. You can then shutdown the Jupyter notebook from the web interface. When subsequently loading up the Jupyter notebook, the new password will apply.
+
+This mechanism thus allows a user to change the password if they desire from the Jupyter notebook web interface and it is not necessary to update the config map. The user will need to remember the password though, since that recorded in the custom resource will no longer be valid.

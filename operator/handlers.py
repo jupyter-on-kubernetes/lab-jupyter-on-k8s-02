@@ -299,7 +299,7 @@ def create(name, uid, namespace, spec, logger, **_):
                     "storage": storage_limit
                 }
             }
-        }
+        },
         "storage": {
             "claimName": storage_claim_name,
             "subPath": storage_sub_path

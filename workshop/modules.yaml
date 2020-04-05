@@ -13,10 +13,10 @@ modules:
         name: Default Properties
     exercises/04-operator-process:
         name: Operator Process
-    exercises/05-securing-access:
-        name: Securing Access
-    exercises/06-persistent-storage:
-        name: Persistent Storage
+    exercises/05-setting-password:
+        name: Setting Password
+    exercises/06-persistent-packages:
+        name: Persistent Packages
     exercises/07-preclaimed-storage:
         name: Preclaimed Storage
     workshop-summary:

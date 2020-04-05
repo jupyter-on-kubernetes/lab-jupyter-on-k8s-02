@@ -8,7 +8,7 @@ modules:
     - exercises/02-custom-resources
     - exercises/03-default-properties
     - exercises/04-operator-process
-    - exercises/05-securing-access
-    - exercises/06-persistent-storage
+    - exercises/05-setting-password
+    - exercises/06-persistent-packages
     - exercises/07-preclaimed-storage
     - workshop-summary

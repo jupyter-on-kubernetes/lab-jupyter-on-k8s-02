@@ -15,21 +15,9 @@ apiVersion: jupyter-on-kubernetes.test/v1alpha1
 kind: JupyterNotebook
 metadata:
   name: notebook
-spec:
-  image: jupyter/minimal-notebook
-  serviceAccountName: default
-  resources:
-    requests:
-      storage: 1Gi
-    limits:
-      memory: 512Mi
 ```
 
-This custom resource says that we want to create a deployment of a Jupyter notebook called ``notebook`` and that it should use the ``jupyter/minimal-notebook`` image from the set of official Jupyter notebook images from the Jupyter project.
-
-The definition also indicates we want 512Mi of memory allocated to run the Jupyter notebook, and that 1Gi of persistent storage should be allocated and mounted into the container for the Jupyter notebook to hold any notebooks and data files.
-
-Instead of having to define five different resources, we know only need to have one.
+This custom resource says that we want to create a deployment of a Jupyter notebook called ``notebook`` and that is all. Nothing else needed to be supplied, we did not have to define the five different resources we did previously.
 
 With this custom resource definition, to create the deployment, as with any Kubernetes resource you would run:
 
@@ -39,7 +27,7 @@ kubectl apply -f notebook-v2/jupyternotebook.yaml
 
 Because this is not one of the core Kubernetes resources, one needs to have a custom Kubernetes operator running which responds and performs any appropriate actions when an instance of the resource is created.
 
-In this case, the actions of the operator result in instances of the five resources we previously created manually, to be created for us.
+In this case, the actions of the operator result in the other resources we previously created manually, being created for us.
 
 ```execute
 kubectl get all,configmap,pvc,ingress -l app=notebook -o name
@@ -53,7 +41,7 @@ kubectl rollout status deployment/notebook
 
 Once the deployment has completed, the Jupyter notebook will be available at:
 
-http://notebook-%session_namespace%.%ingress_domain%/
+http://notebook-%session_namespace%.%ingress_domain%
 
 Access to the Jupyter notebook will still be gated by a password, but this time a unique password will be generated for each deployment.
 
@@ -66,8 +54,8 @@ kubectl get jupyternotebooks/notebook
 You should see output similar to:
 
 ```
-NAME       URL                                                                     PASSWORD
-notebook   http://notebook-%session_namespace%.%ingress_domain%s   aAbBcCdDeEfFgGhH
+NAME       URL                                                   PASSWORD
+notebook   http://notebook-%session_namespace%.%ingress_domain%  aAbBcCdDeEfFgGhH
 ```
 
 You will need to copy the password from the terminal and paste it into the login page of the Jupyter notebook.

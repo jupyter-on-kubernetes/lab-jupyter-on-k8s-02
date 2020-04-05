@@ -3,10 +3,13 @@ kind: JupyterNotebook
 metadata:
   name: notebook
 spec:
-  image: jupyter/minimal-notebook
-  serviceAccountName: default
-  resources:
-    requests:
-      storage: 5Gi
-    limits:
-      memory: 512Mi
+  notebook:
+    interface: lab
+  deployment:
+    image: jupyter/minimal-notebook
+    serviceAccountName: default
+    resources:
+      requests:
+        storage: 5Gi
+      limits:
+        memory: 512Mi

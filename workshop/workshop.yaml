@@ -6,5 +6,6 @@ modules:
     - verify-environment
     - exercises/01-notebook-deployment
     - exercises/02-custom-resources
-    - exercises/03-operator-implementation
+    - exercises/03-default-properties
+    - exercises/04-operator-process
     - workshop-summary

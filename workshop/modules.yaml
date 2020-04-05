@@ -9,8 +9,10 @@ modules:
         name: Notebook Deployment
     exercises/02-custom-resources:
         name: Custom Resources
-    exercises/03-operator-implementation:
-        name: Operator Implementation
+    exercises/03-default-properties:
+        name: Default Properties
+    exercises/04-operator-process:
+        name: Operator Process
     workshop-summary:
         name: Workshop Summary
         exit_sign: Finish Workshop

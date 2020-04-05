@@ -37,7 +37,7 @@ fi
 """
 
 @kopf.on.create("jupyter-on-kubernetes.test", "v1alpha1", "jupyternotebooks")
-def create(name, uid, namespace, spec, logger, **_):
+def notebook(name, uid, namespace, spec, logger, **_):
     apps_api = kubernetes.client.AppsV1Api()
     core_api = kubernetes.client.CoreV1Api()
     extensions_api = kubernetes.client.ExtensionsV1beta1Api()
@@ -156,15 +156,15 @@ def create(name, uid, namespace, spec, logger, **_):
         deployment_body["spec"]["template"]["spec"]["containers"][0]["env"].append(
                 {"name": "JUPYTER_ENABLE_LAB", "value": "true"})
 
-    volume_limit = spec.get("resources", {}).get("limits", {}).get("storage")
-    volume_request = spec.get("resources", {}).get("requests", {}).get("storage")
+    storage_limit = spec.get("resources", {}).get("limits", {}).get("storage", "")
+    storage_request = spec.get("resources", {}).get("requests", {}).get("storage", "")
 
-    if volume_request or volume_limit:
+    if storage_request or storage_limit:
         volume = {"name": "data", "persistentVolumeClaim": {"claimName": "notebook"}}
         deployment_body["spec"]["template"]["spec"]["volumes"].append(volume)
 
-        volume_mount = {"name": "data", "mountPath": "/home/jovyan"}
-        deployment_body["spec"]["template"]["spec"]["containers"][0]["volumeMounts"].append(volume_mount)
+        storage_mount = {"name": "data", "mountPath": "/home/jovyan"}
+        deployment_body["spec"]["template"]["spec"]["containers"][0]["volumeMounts"].append(storage_mount)
 
         persistent_volume_claim_body = {
             "apiVersion": "v1",
@@ -184,11 +184,11 @@ def create(name, uid, namespace, spec, logger, **_):
             }
         }
 
-        if volume_request:
-            persistent_volume_claim_body["spec"]["resources"]["requests"]["storage"] = volume_request
+        if storage_request:
+            persistent_volume_claim_body["spec"]["resources"]["requests"]["storage"] = storage_request
 
-        if volume_limit:
-            persistent_volume_claim_body["spec"]["resources"]["limits"]["storage"] = volume_limit
+        if storage_limit:
+            persistent_volume_claim_body["spec"]["resources"]["limits"]["storage"] = storage_limit
         kopf.adopt(persistent_volume_claim_body)
 
         core_api.create_namespaced_persistent_volume_claim(namespace=namespace,
@@ -267,6 +267,21 @@ def create(name, uid, namespace, spec, logger, **_):
     extensions_api.create_namespaced_ingress(namespace=namespace, body=ingress_body)
 
     return {
-      "url": f"http://{ingress_hostname}",
-      "password": password
+        "url": f"http://{ingress_hostname}",
+        "password": password,
+        "interface": notebook_interface,
+        "deployment": {
+            "image": image,
+            "serviceAccountName": service_account,
+            "resources": {
+                "requests": {
+                    "memory": memory_request,
+                    "storage": storage_request
+                },
+                "limits": {
+                    "memory": memory_limit,
+                    "storage": storage_limit
+                }
+            }
+        }
     }

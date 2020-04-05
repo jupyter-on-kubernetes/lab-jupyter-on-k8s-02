@@ -163,8 +163,8 @@ def create(name, uid, namespace, spec, logger, **_):
     storage_sub_path = spec.get("storage", {}).get("claimName", "")
 
     if not storage_claim_name:
-        storage_limit = spec.get("deployment", {}).get("resources", {}).get("limits", {}).get("storage", "")
         storage_request = spec.get("deployment", {}).get("resources", {}).get("requests", {}).get("storage", "")
+        storage_limit = spec.get("deployment", {}).get("resources", {}).get("limits", {}).get("storage", "")
 
         if storage_request or storage_limit:
             volume = {"name": "data", "persistentVolumeClaim": {"claimName": "notebook"}}

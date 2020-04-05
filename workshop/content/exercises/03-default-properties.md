@@ -25,6 +25,9 @@ Status:
       Interface:  lab
       Password:   aAbBcCdDeEfFgGhH
       URL:        http://notebook-%session_namespace%.%ingress_domain%
+    Storage:
+      Claim Name:
+      Sub Path:
 ```
 
 As you can see, the operator used the ``jupyter/minimal-notebook`` image from the set of official Jupyter notebook images from the Jupyter project. It also specified that 512Mi of memory be allocated to run the Jupyter notebook and that the deployment be run using the ``default`` service account in the namespace.
@@ -83,6 +86,10 @@ List the resources created in this case by running:
 kubectl get all,configmap,pvc,ingress -l app=notebook -o name
 ```
 
-You will see this time that an additional resource was created for a ``persistentvolumeclaim``. This is because the default case is that persistent storage would not be provided. As a storage request was made this time, storage was allocated and mounted into the Jupyter notebook deployment.
+You will see this time that an additional resource was created for a ``persistentvolumeclaim``. This is because the default case is that persistent storage would not be provided. As a storage request was made this time, storage was allocated and mounted into the Jupyter notebook deployment. This request for persistent storage is also reflected in the status captured in the custom resource.
+
+```execute
+kubectl describe jupyternotebook/notebook
+```
 
 This shows the utility of using a custom resource, in that in can apply defaults, but also allow you to optionally enable additional capabilities. The operator will then worry about the actual details as to what resources are required and how to configure them.

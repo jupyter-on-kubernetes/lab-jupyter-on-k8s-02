@@ -15,8 +15,13 @@ source $HOME/.bashrc
 if [ ! -f $HOME/.condarc ]; then
     cat > $HOME/.condarc << EOF
 envs_dirs:
-  - /home/jovyan/.conda/envs
+  - $HOME/.conda/envs
 EOF
+fi
+
+if [ -d $HOME/.conda/envs/workspace ]; then
+    echo "Activate virtual environment 'workspace'."
+    conda activate workspace
 fi
 
 if [ ! -f $HOME/.jupyter/jupyter_notebook_config.json ]; then
@@ -28,11 +33,6 @@ if [ ! -f $HOME/.jupyter/jupyter_notebook_config.json ]; then
   }
 }
 EOF
-fi
-
-if [ -d $HOME/.conda/envs/workspace ]; then
-    echo "Activate virtual environment 'workspace'."
-    conda activate workspace
 fi
 """
 

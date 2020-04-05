@@ -17,6 +17,8 @@ modules:
         name: Securing Access
     exercises/06-persistent-storage:
         name: Persistent Storage
+    exercises/07-preclaimed-storage:
+        name: Preclaimed Storage
     workshop-summary:
         name: Workshop Summary
         exit_sign: Finish Workshop

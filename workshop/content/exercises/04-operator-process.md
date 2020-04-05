@@ -14,7 +14,7 @@ or use the **Editor** embedded in the workshop dashboard to open the ``operator/
 
 The operator in question is implemented in the Python programming language and uses the [kopf](https://kopf.readthedocs.io/) framework.
 
-As far as operators goes, this operator for handling deployment of Jupyter notebooks is quite simple. It will react to the creation of a custom resources of type ``JupyterNotebook`` and create the required resources to deploy the Jupyter notebook. Once those resources are created, the operator takes no further interest in the custom resource or the resources created in response.
+As far as operators goes, this operator for handling deployment of Jupyter notebooks is quite simple. It will react to the creation of a custom resource of type ``JupyterNotebook`` and create the required resources to deploy the Jupyter notebook. Once those resources are created, the operator takes no further interest in the custom resource or the resources created in response.
 
 In other words, unlike many other operators, it doesn't implement a continual process of reconciliation to ensure that the deployment matches details specified in the custom resource. Thus, even if you were to modify the custom resource to increase the memory to be allocated to the container, the operator will not change the deployment to match. This removes a lot of the complexity that arises in the implementation of an operator, and for this use case isn't an essential requirement.
 

@@ -116,42 +116,49 @@ spec:
             storage: true
         validation:
           openAPIV3Schema:
-          type: object
-          properties:
-            spec:
-              type: object
-              properties:
-                notebook:
-                  type: object
-                  properties:
-                    interface:
-                      type: string
-                deployment:
-                  type: object
-                  properties:
-                    image:
-                      type: string
-                    serviceAccountName:
-                      type: string
-                    resources:
-                      type: object
-                      properties:
-                        requests:
-                          type: object
-                          properties:
-                            memory:
-                              type: string
-                            storage:
-                              type: string
-                        limits:
-                          type: object
-                          properties:
-                            memory:
-                              type: string
-                            storage:
-                              type: string
-            status:
-              type: object
+            type: object
+            properties:
+              spec:
+                type: object
+                properties:
+                  notebook:
+                    type: object
+                    properties:
+                      interface:
+                        type: string
+                  deployment:
+                    type: object
+                    properties:
+                      image:
+                        type: string
+                      serviceAccountName:
+                        type: string
+                      resources:
+                        type: object
+                        properties:
+                          requests:
+                            type: object
+                            properties:
+                              memory:
+                                type: string
+                              storage:
+                                type: string
+                          limits:
+                            type: object
+                            properties:
+                              memory:
+                                type: string
+                              storage:
+                                type: string
+                  storage:
+                    type: object
+                    properties:
+                      claimName:
+                        type: string
+                      subPath:
+                        type: string
+              status:
+                type: object
         additionalPrinterColumns:
         - name: URL
           type: string

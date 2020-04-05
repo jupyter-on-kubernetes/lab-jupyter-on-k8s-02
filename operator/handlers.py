@@ -156,43 +156,57 @@ def create(name, uid, namespace, spec, logger, **_):
         deployment_body["spec"]["template"]["spec"]["containers"][0]["env"].append(
                 {"name": "JUPYTER_ENABLE_LAB", "value": "true"})
 
-    storage_limit = spec.get("deployment", {}).get("resources", {}).get("limits", {}).get("storage", "")
-    storage_request = spec.get("deployment", {}).get("resources", {}).get("requests", {}).get("storage", "")
+    storage_request = ""
+    storage_limit = ""
 
-    if storage_request or storage_limit:
-        volume = {"name": "data", "persistentVolumeClaim": {"claimName": "notebook"}}
-        deployment_body["spec"]["template"]["spec"]["volumes"].append(volume)
+    storage_claim_name = spec.get("storage", {}).get("claimName", "")
+    storage_sub_path = spec.get("storage", {}).get("claimName", "")
 
-        storage_mount = {"name": "data", "mountPath": "/home/jovyan"}
-        deployment_body["spec"]["template"]["spec"]["containers"][0]["volumeMounts"].append(storage_mount)
+    if not storage_claim_name:
+        storage_limit = spec.get("deployment", {}).get("resources", {}).get("limits", {}).get("storage", "")
+        storage_request = spec.get("deployment", {}).get("resources", {}).get("requests", {}).get("storage", "")
 
-        persistent_volume_claim_body = {
-            "apiVersion": "v1",
-            "kind": "PersistentVolumeClaim",
-            "metadata": {
-                "name": name,
-                "labels": {
-                    "app": name
-                }
-            },
-            "spec": {
-                "accessModes": ["ReadWriteOnce"],
-                "resources": {
-                    "requests": {},
-                    "limits": {}
+        if storage_request or storage_limit:
+            volume = {"name": "data", "persistentVolumeClaim": {"claimName": "notebook"}}
+            deployment_body["spec"]["template"]["spec"]["volumes"].append(volume)
+
+            storage_mount = {"name": "data", "mountPath": "/home/jovyan"}
+            deployment_body["spec"]["template"]["spec"]["containers"][0]["volumeMounts"].append(storage_mount)
+
+            persistent_volume_claim_body = {
+                "apiVersion": "v1",
+                "kind": "PersistentVolumeClaim",
+                "metadata": {
+                    "name": name,
+                    "labels": {
+                        "app": name
+                    }
+                },
+                "spec": {
+                    "accessModes": ["ReadWriteOnce"],
+                    "resources": {
+                        "requests": {},
+                        "limits": {}
+                    }
                 }
             }
-        }
 
-        if storage_request:
-            persistent_volume_claim_body["spec"]["resources"]["requests"]["storage"] = storage_request
+            if storage_request:
+                persistent_volume_claim_body["spec"]["resources"]["requests"]["storage"] = storage_request
 
-        if storage_limit:
-            persistent_volume_claim_body["spec"]["resources"]["limits"]["storage"] = storage_limit
-        kopf.adopt(persistent_volume_claim_body)
+            if storage_limit:
+                persistent_volume_claim_body["spec"]["resources"]["limits"]["storage"] = storage_limit
+            kopf.adopt(persistent_volume_claim_body)
 
-        core_api.create_namespaced_persistent_volume_claim(namespace=namespace,
-                body=persistent_volume_claim_body)
+            core_api.create_namespaced_persistent_volume_claim(namespace=namespace,
+                    body=persistent_volume_claim_body)
+
+    else:
+        volume = {"name": "data", "persistentVolumeClaim": {"claimName": storage_claim_name}}
+        deployment_body["spec"]["template"]["spec"]["volumes"].append(volume)
+
+        storage_mount = {"name": "data", "mountPath": "/home/jovyan", "subPath": storage_sub_path}
+        deployment_body["spec"]["template"]["spec"]["containers"][0]["volumeMounts"].append(storage_mount)
 
     kopf.adopt(deployment_body)
 
@@ -285,5 +299,9 @@ def create(name, uid, namespace, spec, logger, **_):
                     "storage": storage_limit
                 }
             }
+        }
+        "storage": {
+            "claimName": storage_claim_name,
+            "subPath": storage_sub_path
         }
     }

@@ -152,9 +152,9 @@ spec:
           type: string
           priority: 0
           description: URL for acessing the Jupyter notebook.
-          JSONPath: .status.create.url
+          JSONPath: .status.notebook.url
         - name: Password
           type: string
           priority: 0
           description: Password for accessing the Jupyter notebook.
-          JSONPath: .status.create.password
+          JSONPath: .status.notebook.password

@@ -119,32 +119,35 @@ spec:
             spec:
               type: object
               properties:
-                image:
-                  type: string
-                serviceAccountName:
-                  type: string
-                resources:
-                  type: object
-                  properties:
-                    requests:
-                      type: object
-                      properties:
-                        memory:
-                          type: string
-                        storage:
-                          type: string
-                    limits:
-                      type: object
-                      properties:
-                        memory:
-                          type: string
-                        storage:
-                          type: string
                 notebook:
                   type: object
                   properties:
                     interface:
                       type: string
+                deployment:
+                  type: object
+                  properties:
+                    image:
+                      type: string
+                    serviceAccountName:
+                      type: string
+                    resources:
+                      type: object
+                      properties:
+                        requests:
+                          type: object
+                          properties:
+                            memory:
+                              type: string
+                            storage:
+                              type: string
+                        limits:
+                          type: object
+                          properties:
+                            memory:
+                              type: string
+                            storage:
+                              type: string
             status:
               type: object
         additionalPrinterColumns:
@@ -152,9 +155,9 @@ spec:
           type: string
           priority: 0
           description: URL for acessing the Jupyter notebook.
-          JSONPath: .status.notebook.url
+          JSONPath: .status.jupyter.notebook.url
         - name: Password
           type: string
           priority: 0
           description: Password for accessing the Jupyter notebook.
-          JSONPath: .status.notebook.password
+          JSONPath: .status.jupyter.notebook.password

@@ -36,8 +36,8 @@ if [ -d $HOME/.conda/envs/workspace ]; then
 fi
 """
 
-@kopf.on.create("jupyter-on-kubernetes.test", "v1alpha1", "jupyternotebooks")
-def notebook(name, uid, namespace, spec, logger, **_):
+@kopf.on.create("jupyter-on-kubernetes.test", "v1alpha1", "jupyternotebooks", id="jupyter")
+def create(name, uid, namespace, spec, logger, **_):
     apps_api = kubernetes.client.AppsV1Api()
     core_api = kubernetes.client.CoreV1Api()
     extensions_api = kubernetes.client.ExtensionsV1beta1Api()
@@ -72,13 +72,13 @@ def notebook(name, uid, namespace, spec, logger, **_):
 
     core_api.create_namespaced_config_map(namespace=namespace, body=config_map_body)
 
-    image = spec.get("image", "jupyter/minimal-notebook:latest")
-    service_account = spec.get("serviceAccountName", "default")
-
     notebook_interface = spec.get("notebook", {}).get("interface", "lab")
 
-    memory_limit = spec.get("resources", {}).get("limits", {}).get("memory", "512Mi")
-    memory_request = spec.get("resources", {}).get("requests", {}).get("memory", memory_limit)
+    image = spec.get("deployment", {}).get("image", "jupyter/minimal-notebook:latest")
+    service_account = spec.get("deployment", {}).get("serviceAccountName", "default")
+
+    memory_limit = spec.get("deployment", {}).get("resources", {}).get("limits", {}).get("memory", "512Mi")
+    memory_request = spec.get("deployment", {}).get("resources", {}).get("requests", {}).get("memory", memory_limit)
 
     deployment_body = {
         "apiVersion": "apps/v1",
@@ -156,8 +156,8 @@ def notebook(name, uid, namespace, spec, logger, **_):
         deployment_body["spec"]["template"]["spec"]["containers"][0]["env"].append(
                 {"name": "JUPYTER_ENABLE_LAB", "value": "true"})
 
-    storage_limit = spec.get("resources", {}).get("limits", {}).get("storage", "")
-    storage_request = spec.get("resources", {}).get("requests", {}).get("storage", "")
+    storage_limit = spec.get("deployment", {}).get("resources", {}).get("limits", {}).get("storage", "")
+    storage_request = spec.get("deployment", {}).get("resources", {}).get("requests", {}).get("storage", "")
 
     if storage_request or storage_limit:
         volume = {"name": "data", "persistentVolumeClaim": {"claimName": "notebook"}}
@@ -267,9 +267,11 @@ def notebook(name, uid, namespace, spec, logger, **_):
     extensions_api.create_namespaced_ingress(namespace=namespace, body=ingress_body)
 
     return {
-        "url": f"http://{ingress_hostname}",
-        "password": password,
-        "interface": notebook_interface,
+        "notebook" : {
+            "url": f"http://{ingress_hostname}",
+            "password": password,
+            "interface": notebook_interface,
+        },
         "deployment": {
             "image": image,
             "serviceAccountName": service_account,

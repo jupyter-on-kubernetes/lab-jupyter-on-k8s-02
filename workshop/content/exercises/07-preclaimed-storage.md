@@ -23,7 +23,7 @@ spec:
 
 The name of the persistent volume claim we have used is ``workspaces``.
 
-To view the custom resource for the Jupyter notebook deployment which would then used run:
+To view the custom resource for the Jupyter notebook deployment setup to use this, run:
 
 ```execute
 cat notebook-v4/jupyternotebook.yaml
@@ -37,20 +37,12 @@ kind: JupyterNotebook
 metadata:
   name: notebook
 spec:
-  notebook:
-    interface: lab
-  deployment:
-    image: jupyter/minimal-notebook
-    serviceAccountName: default
-    resources:
-      limits:
-        memory: 512Mi
   storage:
     claimName: workspaces
     subPath: workspace-1
 ```
 
-Instead of specify a size for request storage, we instead provide a separate section for storage which lists the name of the existing persistent volume claim. Although not required, we have also listed a ``subPath`` within the persistent volume to be used for this Jupyter notebook deployment.
+Instead of specifying a size for request storage, we instead provide a separate section for storage which lists the name of the existing persistent volume claim. Although not required, we have also listed a ``subPath`` within the persistent volume to be used for this Jupyter notebook deployment.
 
 Before we try this variation, delete the existing Jupyter notebook deployment by running:
 
@@ -108,8 +100,8 @@ There are a couple of other tricks you can also do.
 
 In this case we specified the ``subPath`` within the persistent volume to use for the deployment. If this wasn't done, then the root of the persistent volume would be used.
 
-By specifying a subpath, the persistent volume can be divided up, with different sub directories for each of Jupyter notebook deployments, where more than one is created.
+By specifying a subpath, the persistent volume can be divided up, with different sub directories for each of the Jupyter notebook deployments, where more than one is created.
 
-In this case since the storage type was ``ReadWriteOnce``, you would be able to have only one active Jupyter notebook deployment at a time, but if you have storage available of type ``ReadWriteMany``, then you could have multiple deployments with different names running at the same time, sharing the same persistent storage, but with files located in different directories. So long as the sub paths were not overlapping, you would not be able to see files from one deployment from another deployment.
+In this case since the storage type was ``ReadWriteOnce``, you would only be able to have one active Jupyter notebook deployment at a time using the persistent storage, but if you have storage available of type ``ReadWriteMany``, then you could have multiple deployments with different names running at the same time, sharing the same persistent storage, but with files located in different directories. So long as the sub paths were not overlapping, you would not be able to see files from one deployment from another deployment.
 
 That said, if you were using separate sub paths in the persistent storage for different deployments, you could also create a deployment where no subpath was specified, which would allow you to see files from all deployments using a subpath, at the same time. This could be handy for moving files between the directories for the respective deployments.

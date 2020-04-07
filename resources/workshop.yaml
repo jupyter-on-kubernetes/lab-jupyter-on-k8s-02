@@ -73,9 +73,23 @@ spec:
         namespace: $(workshop_namespace)
         name: $(service_account)
     - apiVersion: rbac.authorization.k8s.io/v1
+      kind: ClusterRoleBinding
+      metadata:
+        name: $(session_namespace)-crds
+      roleRef:
+        apiGroup: rbac.authorization.k8s.io
+        kind: ClusterRole
+        name: $(workshop_namespace)-crds
+      subjects:
+      - kind: ServiceAccount
+        namespace: $(workshop_namespace)
+        name: $(service_account)
+  workshop:
+    objects:
+    - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole
       metadata:
-        name: $(session_namespace)-user
+        name: $(workshop_namespace)-crds
       rules:
       - apiGroups:
         - apiextensions.k8s.io
@@ -85,20 +99,6 @@ spec:
         - get
         - list
         - watch
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRoleBinding
-      metadata:
-        name: $(session_namespace)-user
-      roleRef:
-        apiGroup: rbac.authorization.k8s.io
-        kind: ClusterRole
-        name: $(session_namespace)-user
-      subjects:
-      - kind: ServiceAccount
-        namespace: $(workshop_namespace)
-        name: $(service_account)
-  workshop:
-    objects:
     - apiVersion: apiextensions.k8s.io/v1beta1
       kind: CustomResourceDefinition
       metadata:

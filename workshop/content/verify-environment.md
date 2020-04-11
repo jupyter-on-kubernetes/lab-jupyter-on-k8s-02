@@ -8,4 +8,4 @@ Did you type the command in yourself? If you did, click on the command instead a
 
 If the command above outputs ``yes``, you are all good to go.
 
-If at any time while doing the workshop, the terminals loose connectivity and show as being **Closed**, select the menu top right and click on **Reload Terminal**. This should restore the connection for the terminal session.
+If at any time while doing the workshop, the terminals loose connectivity and show as being **Closed**, with the <span class="fas fa-sync-alt"></span> sync icon top right showing as red, click on the sync button to reconnect.

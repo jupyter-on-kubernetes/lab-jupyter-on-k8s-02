@@ -1,4 +1,4 @@
-name: Markdown Sample
+name: "Jupyter on Kubernetes #2"
 
 modules:
     activate:

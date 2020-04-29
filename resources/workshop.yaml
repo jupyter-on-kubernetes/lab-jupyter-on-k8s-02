@@ -85,7 +85,7 @@ spec:
       - kind: ServiceAccount
         namespace: $(workshop_namespace)
         name: $(service_account)
-  workshop:
+  environment:
     objects:
     - apiVersion: rbac.authorization.k8s.io/v1
       kind: ClusterRole

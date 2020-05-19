@@ -24,7 +24,7 @@ Status:
     Notebook:
       Interface:  lab
       Password:   aAbBcCdDeEfFgGhH
-      URL:        http://notebook-%session_namespace%.%ingress_domain%
+      URL:        http://notebook-{{session_namespace}}.{{ingress_domain}}
     Storage:
       Claim Name:
       Sub Path:
@@ -96,4 +96,4 @@ This shows the utility of using a custom resource, in that in can apply defaults
 
 Once the deployment has completed, open the Jupyter notebook again and login using the password listed in the details of the custom resource so you have it available if you want to try anything described in later parts of this workshop.
 
-http://notebook-%session_namespace%.%ingress_domain%
+http://notebook-{{session_namespace}}.{{ingress_domain}}

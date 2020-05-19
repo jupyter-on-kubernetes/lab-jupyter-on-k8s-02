@@ -76,7 +76,7 @@ kubectl get jupyternotebook/notebook
 
 and access the Jupyter notebook by clicking on:
 
-http://notebook-%session_namespace%.%ingress_domain%
+http://notebook-{{session_namespace}}.{{ingress_domain}}
 
 Use the password displayed above with the details for accessing the Jupyter notebook instance.
 

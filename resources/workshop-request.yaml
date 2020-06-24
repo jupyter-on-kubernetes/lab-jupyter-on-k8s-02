@@ -1,8 +1,0 @@
-apiVersion: training.eduk8s.io/v1alpha1
-kind: WorkshopRequest
-metadata:
-  name: lab-jupyter-on-k8s-02
-spec:
-  environment:
-    name: lab-jupyter-on-k8s-02
-    token: lab-jupyter-on-k8s-02

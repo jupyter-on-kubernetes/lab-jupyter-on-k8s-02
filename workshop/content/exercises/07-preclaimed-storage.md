@@ -50,6 +50,12 @@ Before we try this variation, delete the existing Jupyter notebook deployment by
 kubectl delete jupyternotebook/notebook
 ```
 
+Make sure all the resources have been deleted by running:
+
+```execute
+kubectl get all,configmap,pvc,ingress -l app=notebook -o name
+```
+
 To create the persistent volume claim we require, now run:
 
 ```execute

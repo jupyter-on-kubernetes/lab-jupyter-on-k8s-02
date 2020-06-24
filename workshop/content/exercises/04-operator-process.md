@@ -7,7 +7,7 @@ That said, in this workshop environment, rather than have the operator we are re
 To view the source code for the operator, run:
 
 ```execute
-cat $HOME/operator/handlers.py
+cat operator/handlers.py
 ```
 
 or use the **Editor** embedded in the workshop dashboard to open the ``operator/handlers.py`` file.

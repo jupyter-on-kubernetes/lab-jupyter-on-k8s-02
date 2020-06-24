@@ -5,7 +5,7 @@ metadata:
 spec:
   portal:
     capacity: 1
-    expires: 30m
+    expires: 45m
     orphaned: 5m
   workshops:
   - name: lab-jupyter-on-k8s-02

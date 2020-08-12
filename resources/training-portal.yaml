@@ -3,9 +3,8 @@ kind: TrainingPortal
 metadata:
   name: lab-jupyter-on-k8s-02
 spec:
-  portal:
+  workshops:
+  - name: lab-jupyter-on-k8s-02
     capacity: 1
     expires: 45m
     orphaned: 5m
-  workshops:
-  - name: lab-jupyter-on-k8s-02

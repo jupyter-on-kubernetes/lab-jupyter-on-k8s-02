@@ -7,10 +7,10 @@ That said, in this workshop environment, rather than have the operator we are re
 To view the source code for the operator, run:
 
 ```execute
-cat operator/handlers.py
+cat ~/exercises/operator/handlers.py
 ```
 
-or use the **Editor** embedded in the workshop dashboard to open file.
+or use the **Editor** embedded in the workshop dashboard to open the file.
 
 ```editor:open-file
 file: ~/exercises/operator/handlers.py

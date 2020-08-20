@@ -96,4 +96,6 @@ This shows the utility of using a custom resource, in that in can apply defaults
 
 Once the deployment has completed, if you want to try anything described in later parts of this workshop, open the Jupyter notebook again and login using the password listed in the details of the custom resource.
 
-http://notebook-{{session_namespace}}.{{ingress_domain}}
+```dashboard:open-url
+url: http://notebook-{{session_namespace}}.{{ingress_domain}}
+```

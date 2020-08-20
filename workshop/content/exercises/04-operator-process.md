@@ -10,7 +10,11 @@ To view the source code for the operator, run:
 cat operator/handlers.py
 ```
 
-or use the **Editor** embedded in the workshop dashboard to open the ``operator/handlers.py`` file.
+or use the **Editor** embedded in the workshop dashboard to open file.
+
+```editor:open-file
+file: ~/exercises/operator/handlers.py
+```
 
 The operator in question is implemented in the Python programming language and uses the [kopf](https://kopf.readthedocs.io/) framework.
 

@@ -2,7 +2,7 @@ By adding a request for storage in the custom resource for the Jupyter notebook,
 
 As in the last workshop, this persistent volume was mounted on the home directory ``/home/jovyan``, where a users notebooks and data files would be created or uploaded. A user can install additional Python packages using either ``conda`` or ``pip``, however these packages are installed outside of the home directory of the user into the ``/opt/conda`` directory. Specifically, they were installed into the Anaconda Python base environment. This meant that if the container the Jupyter notebook was running in were restarted, those changes would be lost and the packages would need to be reinstalled.
 
-In order to provide the option of having any installed packages be persistent, the startup script mounted into the container contains steps to allow the Jupyter notebook environment to be switch to an alternate Python virtual environment located in the area of persistent storage under ``/home/jovyan``.
+In order to provide the option of having any installed packages be persistent, the startup script mounted into the container contains steps to allow the Jupyter notebook environment to be switched to an alternate Python virtual environment located in the area of persistent storage under ``/home/jovyan``.
 
 The steps in the startup script which enable this were:
 

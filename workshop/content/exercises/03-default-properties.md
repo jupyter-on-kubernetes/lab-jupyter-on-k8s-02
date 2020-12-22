@@ -92,7 +92,7 @@ You will see this time that an additional resource was created for a ``persisten
 kubectl describe jupyternotebook/notebook
 ```
 
-This shows the utility of using a custom resource, in that in can apply defaults, but also allow you to optionally enable additional capabilities. The operator will then worry about the actual details as to what resources are required and how to configure them.
+This shows the utility of using a custom resource, in that it can apply defaults, but also allow you to optionally enable additional capabilities. The operator will then worry about the actual details as to what resources are required and how to configure them.
 
 Once the deployment has completed, if you want to try anything described in later parts of this workshop, open the Jupyter notebook again and login using the password listed in the details of the custom resource.
 

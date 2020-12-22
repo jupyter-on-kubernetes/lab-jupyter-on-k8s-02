@@ -10,7 +10,7 @@ In order to use the workshop you should have the eduk8s operator installed.
 
 For installation instructions for the eduk8s operator see:
 
-* https://github.com/eduk8s/eduk8s-operator
+* https://github.com/eduk8s/eduk8s
 
 Deployment
 ----------

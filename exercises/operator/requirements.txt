@@ -1,2 +1,1 @@
-kopf==0.26
-kubernetes==11.0.0
+kopf==0.28.3

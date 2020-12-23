@@ -4,8 +4,9 @@ import hashlib
 import string
 
 import kopf
-import kubernetes
-import kubernetes.client
+import pykube
+
+api = pykube.HTTPClient(pykube.KubeConfig.from_env())
 
 notebook_startup = """#!/bin/bash
 conda init
@@ -38,10 +39,6 @@ fi
 
 @kopf.on.create("jupyter-on-kubernetes.test", "v1alpha1", "jupyternotebooks", id="jupyter")
 def create(name, uid, namespace, spec, logger, **_):
-    apps_api = kubernetes.client.AppsV1Api()
-    core_api = kubernetes.client.CoreV1Api()
-    extensions_api = kubernetes.client.ExtensionsV1beta1Api()
-
     algorithm = "sha1"
     salt_len = 12
 
@@ -59,6 +56,7 @@ def create(name, uid, namespace, spec, logger, **_):
         "kind": "ConfigMap",
         "metadata": {
             "name": name,
+            "namespace": namespace,
             "labels": {
                 "app": name
             }
@@ -70,7 +68,9 @@ def create(name, uid, namespace, spec, logger, **_):
 
     kopf.adopt(config_map_body)
 
-    core_api.create_namespaced_config_map(namespace=namespace, body=config_map_body)
+    K8SConfigMap = pykube.object_factory(api, "v1", "ConfigMap")
+    config_map_resource = K8SConfigMap(api, config_map_body)
+    config_map_resource.create()
 
     notebook_interface = spec.get("notebook", {}).get("interface", "lab")
 
@@ -85,6 +85,7 @@ def create(name, uid, namespace, spec, logger, **_):
         "kind": "Deployment",
         "metadata": {
             "name": name,
+            "name": namespace,
             "labels": {
                 "app": name
             }
@@ -178,6 +179,7 @@ def create(name, uid, namespace, spec, logger, **_):
                 "kind": "PersistentVolumeClaim",
                 "metadata": {
                     "name": name,
+                    "namespace", namespace,
                     "labels": {
                         "app": name
                     }
@@ -198,8 +200,9 @@ def create(name, uid, namespace, spec, logger, **_):
                 persistent_volume_claim_body["spec"]["resources"]["limits"]["storage"] = storage_limit
             kopf.adopt(persistent_volume_claim_body)
 
-            core_api.create_namespaced_persistent_volume_claim(namespace=namespace,
-                    body=persistent_volume_claim_body)
+            K8SPersistentVolumeClaim = pykube.object_factory(api, "v1", "PersistentVolumeClaim")
+            persistent_volume_claim_resource = K8SConfigMap(api, persistent_volume_claim_body)
+            persistent_volume_claim_resource.create()
 
     else:
         volume = {"name": "data", "persistentVolumeClaim": {"claimName": storage_claim_name}}
@@ -210,13 +213,16 @@ def create(name, uid, namespace, spec, logger, **_):
 
     kopf.adopt(deployment_body)
 
-    apps_api.create_namespaced_deployment(namespace=namespace, body=deployment_body)
+    K8SDeployment = pykube.object_factory(api, "apps/v1", "Deployment")
+    deployment_resource = K8SConfigMap(api, deployment_body)
+    deployment_resource.create()
 
     service_body = {
         "apiVersion": "v1",
         "kind": "Service",
         "metadata": {
             "name": name,
+            "namespace": namespace,
             "labels": {
                 "app": name
             }
@@ -239,7 +245,9 @@ def create(name, uid, namespace, spec, logger, **_):
 
     kopf.adopt(service_body)
 
-    core_api.create_namespaced_service(namespace=namespace, body=service_body)
+    K8SService = pykube.object_factory(api, "v1", "Service")
+    service_resource = K8SConfigMap(api, service_body)
+    service_resource.create()
 
     ingress_domain = os.environ.get("INGRESS_DOMAIN")
     ingress_hostname = f"notebook-{namespace}.{ingress_domain}"
@@ -249,6 +257,7 @@ def create(name, uid, namespace, spec, logger, **_):
         "kind": "Ingress",
         "metadata": {
             "name": name,
+            "namespace", namespace,
             "labels": {
                 "app": name
             },
@@ -278,7 +287,9 @@ def create(name, uid, namespace, spec, logger, **_):
 
     kopf.adopt(ingress_body)
 
-    extensions_api.create_namespaced_ingress(namespace=namespace, body=ingress_body)
+    K8SIngress = pykube.object_factory(api, "extensions/v1beta1", "Ingress")
+    ingress_resource = K8SConfigMap(api, ingress_body)
+    ingress_resource.create()
 
     return {
         "notebook" : {

@@ -201,7 +201,7 @@ def create(name, uid, namespace, spec, logger, **_):
             kopf.adopt(persistent_volume_claim_body)
 
             K8SPersistentVolumeClaim = pykube.object_factory(api, "v1", "PersistentVolumeClaim")
-            persistent_volume_claim_resource = K8SConfigMap(api, persistent_volume_claim_body)
+            persistent_volume_claim_resource = K8SPersistentVolumeClaim(api, persistent_volume_claim_body)
             persistent_volume_claim_resource.create()
 
     else:
@@ -214,7 +214,7 @@ def create(name, uid, namespace, spec, logger, **_):
     kopf.adopt(deployment_body)
 
     K8SDeployment = pykube.object_factory(api, "apps/v1", "Deployment")
-    deployment_resource = K8SConfigMap(api, deployment_body)
+    deployment_resource = K8SDeployment(api, deployment_body)
     deployment_resource.create()
 
     service_body = {
@@ -246,7 +246,7 @@ def create(name, uid, namespace, spec, logger, **_):
     kopf.adopt(service_body)
 
     K8SService = pykube.object_factory(api, "v1", "Service")
-    service_resource = K8SConfigMap(api, service_body)
+    service_resource = K8SService(api, service_body)
     service_resource.create()
 
     ingress_domain = os.environ.get("INGRESS_DOMAIN")
@@ -288,7 +288,7 @@ def create(name, uid, namespace, spec, logger, **_):
     kopf.adopt(ingress_body)
 
     K8SIngress = pykube.object_factory(api, "extensions/v1beta1", "Ingress")
-    ingress_resource = K8SConfigMap(api, ingress_body)
+    ingress_resource = K8SIngress(api, ingress_body)
     ingress_resource.create()
 
     return {

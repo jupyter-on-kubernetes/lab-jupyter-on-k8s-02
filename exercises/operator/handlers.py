@@ -179,7 +179,7 @@ def create(name, uid, namespace, spec, logger, **_):
                 "kind": "PersistentVolumeClaim",
                 "metadata": {
                     "name": name,
-                    "namespace", namespace,
+                    "namespace": namespace,
                     "labels": {
                         "app": name
                     }
@@ -257,7 +257,7 @@ def create(name, uid, namespace, spec, logger, **_):
         "kind": "Ingress",
         "metadata": {
             "name": name,
-            "namespace", namespace,
+            "namespace": namespace,
             "labels": {
                 "app": name
             },

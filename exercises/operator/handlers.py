@@ -85,7 +85,7 @@ def create(name, uid, namespace, spec, logger, **_):
         "kind": "Deployment",
         "metadata": {
             "name": name,
-            "name": namespace,
+            "namespace": namespace,
             "labels": {
                 "app": name
             }

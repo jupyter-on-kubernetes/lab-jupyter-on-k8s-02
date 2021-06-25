@@ -6,5 +6,5 @@ spec:
   workshops:
   - name: lab-jupyter-on-k8s-02
     capacity: 1
-    expires: 45m
-    orphaned: 5m
+    expires: 60m
+    orphaned: 15m

@@ -36,6 +36,12 @@ conda create --name workspace --clone base
 
 To have the Jupyter notebook use this environment, the Jupyter notebook would be shutdown from the web interface. This will cause the container to be stopped and restarted. When it restarts, as the directory ``$HOME/.conda/envs/workspace`` now exists, that environment would be activated and used. Any packages that are now subsequently installed, will be stored in the persistent volume mounted into the container and will be retained if the Jupyter notebook container were ever restarted.
 
+That link again for the Jupyter notebook if the browser window or tab is also deleted is:
+
+```dashboard:open-url
+url: http://notebook-{{session_namespace}}.{{ingress_domain}}
+```
+
 Although not enabled by default, this does allow a user to opt in to having everything persistent. It is not done by default in case the persistent volume is not of sufficient size or persistence isn't required. Also, the act of creating the clone of the base environment does take time, as it will need to download all the packages off the internet once again, as they are not cached in the container image. This action would delay startup of the Jupyter notebook the first time giving the impression that it hasn't deployed correctly. As such, it is seen as being better that users actively opt into this arrangement and create the new Python virtual environment themselves.
 
 Do note that the new Python virtual environment must be created as a clone of the base environment using the command shown above, otherwise it will be missing all the packages required for running the Jupyter notebook itself. If this is not done correctly, the whole Jupyter notebook deployment would need to be deleted and a new one created.

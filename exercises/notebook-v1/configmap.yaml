@@ -5,9 +5,9 @@ metadata:
   labels:
     app: notebook
 data:
-  jupyter_notebook_config.json: |-
+  jupyter_server_config.json: |-
     {
-      "NotebookApp": {
-        "password": "sha1:9c2069f12451:2ce0e0fb5b5cfa44fe90e8f92f5b9153d988dbd2"
+      "ServerApp": {
+        "password": "argon2:$argon2id$v=19$m=10240,t=10,p=8$OCz4NRN9RNJQqPKQCx5OyQ$YogG0k+sxOe8LohqEzAQuUS/voP1xQY5aTH2oNG/LGs"
       }
     }

@@ -1,17 +1,23 @@
-apiVersion: training.eduk8s.io/v1alpha2
+apiVersion: training.educates.dev/v1beta1
 kind: Workshop
 metadata:
   name: lab-jupyter-on-k8s-02
 spec:
   title: "Jupyter on Kubernetes #2"
-  description: A workshop exploring use of operators to deploy Jupyter notebooks to Kubernetes
-  url: https://github.com/jupyter-on-kubernetes/lab-jupyter-on-k8s-02
-  content:
-    files: github.com/jupyter-on-kubernetes/lab-jupyter-on-k8s-02
-  duration: 45m
+  description: A workshop exploring use of operators to deploy Jupyter notebooks to Kubernetes.
+  workshop:
+    files:
+    - image:
+        url: $(image_repository)/lab-jupyter-on-k8s-02-files:latest
+      includePaths:
+      - /workshop/**
+      - /exercises/**
+      - /README.md
   session:
     namespaces:
       budget: large
+      security:
+        policy: baseline
     applications:
       terminal:
         enabled: true
@@ -100,7 +106,7 @@ spec:
         - get
         - list
         - watch
-    - apiVersion: apiextensions.k8s.io/v1beta1
+    - apiVersion: apiextensions.k8s.io/v1
       kind: CustomResourceDefinition
       metadata:
         name: jupyternotebooks.jupyter-on-kubernetes.test
@@ -115,59 +121,55 @@ spec:
           - name: v1alpha1
             served: true
             storage: true
-        validation:
-          openAPIV3Schema:
-            type: object
-            properties:
-              spec:
+            schema:
+              openAPIV3Schema:
                 type: object
                 properties:
-                  notebook:
+                  spec:
                     type: object
                     properties:
-                      interface:
-                        type: string
-                  deployment:
-                    type: object
-                    properties:
-                      image:
-                        type: string
-                      serviceAccountName:
-                        type: string
-                      resources:
+                      deployment:
                         type: object
                         properties:
-                          requests:
+                          image:
+                            type: string
+                          serviceAccountName:
+                            type: string
+                          resources:
                             type: object
                             properties:
-                              memory:
-                                type: string
-                              storage:
-                                type: string
-                          limits:
-                            type: object
-                            properties:
-                              memory:
-                                type: string
-                              storage:
-                                type: string
-                  storage:
+                              requests:
+                                type: object
+                                properties:
+                                  memory:
+                                    type: string
+                                  storage:
+                                    type: string
+                              limits:
+                                type: object
+                                properties:
+                                  memory:
+                                    type: string
+                                  storage:
+                                    type: string
+                      storage:
+                        type: object
+                        properties:
+                          claimName:
+                            type: string
+                          subPath:
+                            type: string
+                  status:
                     type: object
-                    properties:
-                      claimName:
-                        type: string
-                      subPath:
-                        type: string
-              status:
-                type: object
-        additionalPrinterColumns:
-        - name: URL
-          type: string
-          priority: 0
-          description: URL for acessing the Jupyter notebook.
-          JSONPath: .status.jupyter.notebook.url
-        - name: Password
-          type: string
-          priority: 0
-          description: Password for accessing the Jupyter notebook.
-          JSONPath: .status.jupyter.notebook.password
+                    x-kubernetes-preserve-unknown-fields: true
+            additionalPrinterColumns:
+            - name: URL
+              type: string
+              priority: 0
+              description: URL for acessing the Jupyter notebook.
+              jsonPath: .status.jupyter.notebook.url
+            - name: Password
+              type: string
+              priority: 0
+              description: Password for accessing the Jupyter notebook.
+              jsonPath: .status.jupyter.notebook.password

@@ -3,7 +3,6 @@ name: "Jupyter on Kubernetes #2"
 modules:
     activate:
     - workshop-overview
-    - verify-environment
     - exercises/01-notebook-deployment
     - exercises/02-custom-resources
     - exercises/03-default-properties

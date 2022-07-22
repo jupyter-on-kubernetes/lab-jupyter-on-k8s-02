@@ -22,7 +22,6 @@ Status:
           Storage:
       Service Account Name:  default
     Notebook:
-      Interface:  lab
       Password:   aAbBcCdDeEfFgGhH
       URL:        http://notebook-{{session_namespace}}.{{ingress_domain}}
     Storage:
@@ -48,8 +47,6 @@ kind: JupyterNotebook
 metadata:
   name: notebook
 spec:
-  notebook:
-    interface: lab
   deployment:
     image: jupyter/minimal-notebook
     serviceAccountName: default
@@ -63,7 +60,7 @@ spec:
 Before attempting to deploy this notebook, first delete the existing deployment by running:
 
 ```execute
-kubectl delete jupyternotebook/notebook
+kubectl delete jupyternotebook/notebook --cascade=foreground
 ```
 
 You will note here that we did not have to explicitly list the other resources which were created. This is because the custom resource object we created acted as the owner of the other resources. As such, when the custom resource object was deleted, the other resources were automatically deleted, and we did not have to worry about what they were.

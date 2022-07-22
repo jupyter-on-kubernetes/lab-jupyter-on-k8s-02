@@ -47,7 +47,7 @@ Instead of specifying a size for request storage, we instead provide a separate 
 Before we try this variation, delete the existing Jupyter notebook deployment by running:
 
 ```execute
-kubectl delete jupyternotebook/notebook
+kubectl delete jupyternotebook/notebook --cascade=foreground
 ```
 
 Make sure all the resources have been deleted by running:
@@ -93,7 +93,7 @@ Key with this variation is that when you delete the Jupyter notebook deployment 
 Delete the Jupyter notebook deployment by running:
 
 ```execute
-kubectl delete jupyternotebook/notebook
+kubectl delete jupyternotebook/notebook --cascade=foreground
 ```
 
 Now verify that the persistent volume claim still exists.

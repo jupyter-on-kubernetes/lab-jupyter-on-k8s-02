@@ -1,4 +1,4 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: notebook
@@ -11,7 +11,10 @@ spec:
   - host: notebook-${SESSION_NAMESPACE}.${INGRESS_DOMAIN}
     http:
       paths:
-      - backend:
-          serviceName: notebook
-          servicePort: 8888
-        path: /
+      - path: "/"
+        pathType: Prefix
+        backend:
+          service:
+            name: notebook
+            port:
+              number: 8888

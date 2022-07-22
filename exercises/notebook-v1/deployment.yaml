@@ -22,7 +22,7 @@ spec:
         args:
         - start-notebook.sh
         - --config
-        - /var/run/jupyter/jupyter_notebook_config.py
+        - /var/run/jupyter/jupyter_server_config.py
         - --ip=0.0.0.0
         - --port=8888
         ports:
@@ -34,9 +34,6 @@ spec:
             memory: 512Mi
           requests:
             memory: 512Mi
-        env:
-        - name: JUPYTER_ENABLE_LAB
-          value: "true"
         volumeMounts:
         - name: config
           mountPath: /var/run/jupyter

@@ -3,20 +3,21 @@ In the previous workshop we derived a solution for deploying a Jupyter notebook,
 To see the resource files from that workshop run:
 
 ```execute
-ls notebook-v1/*.yaml
+tree notebook-v1
 ```
 
 The directory should include the files:
 
 ```
-notebook-v1/configmap.yaml
-notebook-v1/persistentvolumeclaim.yaml
-notebook-v1/deployment.yaml
-notebook-v1/service.yaml
-notebook-v1/ingress.yaml
+notebook-v1
+├── configmap.yaml
+├── deployment.yaml
+├── ingress.yaml
+├── persistentvolumeclaim.yaml
+└── service.yaml
 ```
 
-The config map included the ``jupyter_notebook_config.json`` file and was used to set the password for accessing the Jupyter notebook application.
+The config map included the ``jupyter_server_config.json`` file and was used to set the password for accessing the Jupyter notebook application.
 
 ```execute
 cat notebook-v1/configmap.yaml
@@ -53,5 +54,5 @@ jupyter
 When done verifying the deployment worked, delete all the resources created by running:
 
 ```execute
-kubectl delete all,configmap,pvc,ingress -l app=notebook
+kubectl delete all,configmap,pvc,ingress -l app=notebook --cascade=foreground
 ```

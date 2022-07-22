@@ -1,10 +1,11 @@
 import os
 import random
-import hashlib
 import string
 
 import kopf
 import pykube
+
+from passlib.hash import argon2
 
 api = pykube.HTTPClient(pykube.KubeConfig.from_env())
 
@@ -25,12 +26,12 @@ if [ -d $HOME/.conda/envs/workspace ]; then
     conda activate workspace
 fi
 
-if [ ! -f $HOME/.jupyter/jupyter_notebook_config.json ]; then
+if [ ! -f $HOME/.jupyter/jupyter_server_config.json ]; then
     mkdir -p $HOME/.jupyter
-    cat > $HOME/.jupyter/jupyter_notebook_config.json << EOF
+    cat > $HOME/.jupyter/jupyter_server_config.json << 'EOF'
 {
-  "NotebookApp": {
-    "password": "%(password_hash)s"
+  "ServerApp": {
+    "password": "argon2:%(password_hash)s"
   }
 }
 EOF
@@ -45,11 +46,7 @@ def create(name, uid, namespace, spec, logger, **_):
     characters = string.ascii_letters + string.digits
     password = "".join(random.sample(characters, 16))
 
-    h = hashlib.new(algorithm)
-    salt = ("%0" + str(salt_len) + "x") % random.getrandbits(4 * salt_len)
-    h.update(bytes(password, "utf-8") + salt.encode("ascii"))
-
-    password_hash = ":".join((algorithm, salt, h.hexdigest()))
+    password_hash = argon2.hash(password)
 
     config_map_body = {
         "apiVersion": "v1",
@@ -153,10 +150,6 @@ def create(name, uid, namespace, spec, logger, **_):
         },
     }
 
-    if notebook_interface != "classic":
-        deployment_body["spec"]["template"]["spec"]["containers"][0]["env"].append(
-                {"name": "JUPYTER_ENABLE_LAB", "value": "true"})
-
     storage_request = ""
     storage_limit = ""
 
@@ -253,7 +246,7 @@ def create(name, uid, namespace, spec, logger, **_):
     ingress_hostname = f"notebook-{namespace}.{ingress_domain}"
 
     ingress_body = {
-        "apiVersion": "extensions/v1beta1",
+        "apiVersion": "networking.k8s.io/v1",
         "kind": "Ingress",
         "metadata": {
             "name": name,
@@ -273,10 +266,15 @@ def create(name, uid, namespace, spec, logger, **_):
                         "paths": [
                             {
                                 "path": "/",
+                                "pathType": "Prefix",
                                 "backend": {
-                                    "serviceName": name,
-                                    "servicePort": 8888,
-                                },
+                                    "service": {
+                                        "name": name,
+                                        "port": {
+                                        "number": 8888
+                                        }
+                                    }
+                                }
                             }
                         ]
                     }
@@ -287,7 +285,7 @@ def create(name, uid, namespace, spec, logger, **_):
 
     kopf.adopt(ingress_body)
 
-    K8SIngress = pykube.object_factory(api, "extensions/v1beta1", "Ingress")
+    K8SIngress = pykube.object_factory(api, "networking.k8s.io/v1", "Ingress")
     ingress_resource = K8SIngress(api, ingress_body)
     ingress_resource.create()
 

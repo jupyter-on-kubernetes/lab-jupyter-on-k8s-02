@@ -2,21 +2,15 @@ The purpose of a Kubernetes operator is to monitor a set of custom resources and
 
 The operator is no different to any other workload deployed to a Kubernetes cluster in as much as it is packaged as a container image and deployed to the cluster, running in a container of a pod.
 
-That said, in this workshop environment, rather than have the operator we are relying on deployed once to the cluster, with it monitoring the whole cluster for changes to the custom resources it is interested in, your workshop environment has its own deployment of the operator and it is monitoring only the namespace provided to you for the workshop. The operator process is actually running out of the same container this workshop environment is running.
+That said and as was already noted, in this workshop environment rather than deploy the operator to the Kubernetes cluster we are running it out of the workshop environment.
 
-To view the source code for the operator, run:
-
-```execute
-cat ~/exercises/operator/handlers.py
-```
-
-or use the **Editor** embedded in the workshop dashboard to open the file.
+To view the source code for the operator open the file ``~/exercises/operator/handlers.py``.
 
 ```editor:open-file
 file: ~/exercises/operator/handlers.py
 ```
 
-The operator in question is implemented in the Python programming language and uses the [kopf](https://kopf.readthedocs.io/) framework.
+The operator being used for this workshop is implemented in the Python programming language and uses the [kopf](https://kopf.readthedocs.io/) framework.
 
 As far as operators goes, this operator for handling deployment of Jupyter notebooks is quite simple. It will react to the creation of a custom resource of type ``JupyterNotebook`` and create the required resources to deploy the Jupyter notebook. Once those resources are created, the operator takes no further interest in the custom resource or the resources created in response.
 

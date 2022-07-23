@@ -42,7 +42,7 @@ If this is the first time the container image is being used in the Kubernetes cl
 Once the deployment has completed, the Jupyter notebook will be available at:
 
 ```dashboard:open-url
-url: http://notebook-{{session_namespace}}.{{ingress_domain}}/
+url: http://notebook.{{session_namespace}}.{{ingress_domain}}/
 ```
 
 The password for the Jupyter notebook will be:

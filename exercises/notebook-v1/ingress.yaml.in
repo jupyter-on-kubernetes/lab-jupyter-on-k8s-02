@@ -8,7 +8,7 @@ metadata:
     projectcontour.io/websocket-routes: /
 spec:
   rules:
-  - host: notebook-${SESSION_NAMESPACE}.${INGRESS_DOMAIN}
+  - host: notebook.${SESSION_NAMESPACE}.${INGRESS_DOMAIN}
     http:
       paths:
       - path: "/"

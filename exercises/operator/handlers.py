@@ -292,8 +292,7 @@ def create(name, uid, namespace, spec, logger, **_):
     return {
         "notebook" : {
             "url": f"http://{ingress_hostname}",
-            "password": password,
-            "interface": notebook_interface,
+            "password": password
         },
         "deployment": {
             "image": image,

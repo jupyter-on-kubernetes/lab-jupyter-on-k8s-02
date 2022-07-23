@@ -15,9 +15,7 @@ spec:
       - /README.md
   session:
     namespaces:
-      budget: large
-      security:
-        policy: baseline
+      budget: custom
     applications:
       terminal:
         enabled: true
@@ -26,150 +24,10 @@ spec:
         enabled: true
       editor:
         enabled: true
-    objects:
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: Role
-      metadata:
-        name: jupyter-user
-      rules:
-      - apiGroups:
-        - jupyter-on-kubernetes.test
-        resources:
-        - jupyternotebooks
-        verbs:
-        - get
-        - list
-        - watch
-        - create
-        - patch
-        - update
-        - delete
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: RoleBinding
-      metadata:
-        name: jupyter-user
-      roleRef:
-        apiGroup: rbac.authorization.k8s.io
-        kind: Role
-        name: jupyter-user
-      subjects:
-      - kind: ServiceAccount
-        namespace: $(workshop_namespace)
-        name: $(service_account)
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: Role
-      metadata:
-        name: session-user
-      rules:
-      - apiGroups:
-        - ""
-        resources:
-        - events
-        verbs:
-        - create
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: RoleBinding
-      metadata:
-        name: session-user
-      roleRef:
-        apiGroup: rbac.authorization.k8s.io
-        kind: Role
-        name: session-user
-      subjects:
-      - kind: ServiceAccount
-        namespace: $(workshop_namespace)
-        name: $(service_account)
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRoleBinding
-      metadata:
-        name: $(session_namespace)-crds
-      roleRef:
-        apiGroup: rbac.authorization.k8s.io
-        kind: ClusterRole
-        name: $(workshop_namespace)-crds
-      subjects:
-      - kind: ServiceAccount
-        namespace: $(workshop_namespace)
-        name: $(service_account)
-  environment:
-    objects:
-    - apiVersion: rbac.authorization.k8s.io/v1
-      kind: ClusterRole
-      metadata:
-        name: $(workshop_namespace)-crds
-      rules:
-      - apiGroups:
-        - apiextensions.k8s.io
-        resources:
-        - customresourcedefinitions
-        verbs:
-        - get
-        - list
-        - watch
-    - apiVersion: apiextensions.k8s.io/v1
-      kind: CustomResourceDefinition
-      metadata:
-        name: jupyternotebooks.jupyter-on-kubernetes.test
-      spec:
-        scope: Namespaced
-        group: jupyter-on-kubernetes.test
-        names:
-          plural: jupyternotebooks
-          singular: jupyternotebook
-          kind: JupyterNotebook
-        versions:
-          - name: v1alpha1
-            served: true
-            storage: true
-            schema:
-              openAPIV3Schema:
-                type: object
-                properties:
-                  spec:
-                    type: object
-                    properties:
-                      deployment:
-                        type: object
-                        properties:
-                          image:
-                            type: string
-                          serviceAccountName:
-                            type: string
-                          resources:
-                            type: object
-                            properties:
-                              requests:
-                                type: object
-                                properties:
-                                  memory:
-                                    type: string
-                                  storage:
-                                    type: string
-                              limits:
-                                type: object
-                                properties:
-                                  memory:
-                                    type: string
-                                  storage:
-                                    type: string
-                      storage:
-                        type: object
-                        properties:
-                          claimName:
-                            type: string
-                          subPath:
-                            type: string
-                  status:
-                    type: object
-                    x-kubernetes-preserve-unknown-fields: true
-            additionalPrinterColumns:
-            - name: URL
-              type: string
-              priority: 0
-              description: URL for acessing the Jupyter notebook.
-              jsonPath: .status.jupyter.notebook.url
-            - name: Password
-              type: string
-              priority: 0
-              description: Password for accessing the Jupyter notebook.
-              jsonPath: .status.jupyter.notebook.password
+      vcluster:
+        enabled: true
+        ingress:
+          enabled: true
+    dashboards:
+    - name: Operator
+      url: terminal:operator

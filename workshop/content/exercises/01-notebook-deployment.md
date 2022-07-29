@@ -3,7 +3,7 @@ In the previous workshop we derived a solution for deploying a Jupyter notebook,
 To see the resource files from that workshop run:
 
 ```execute
-tree notebook-v1
+tree notebook-v1 -P '*.yaml'
 ```
 
 The directory should include the files:

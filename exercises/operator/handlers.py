@@ -110,13 +110,6 @@ def create(name, uid, namespace, spec, logger, **_):
                             "name": "notebook",
                             "image": image,
                             "imagePullPolicy": "Always",
-                            "args": [
-                                "start-notebook.sh",
-                                "--config",
-                                "/home/jovyan/.jupyter/jupyter_server_config.json",
-                                "--ip=0.0.0.0",
-                                "--port=8888"
-                            ],
                             "resources": {
                                 "requests": {
                                     "memory": memory_request

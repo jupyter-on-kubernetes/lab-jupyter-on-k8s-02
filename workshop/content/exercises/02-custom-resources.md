@@ -41,7 +41,7 @@ To start the operator in this case run:
 
 ```terminal:execute
 session: operator
-command: INGRESS_DOMAIN={{session_namespace}}.{{ingress_domain}} ~/operator-venv/bin/kopf run --verbose --all-namespaces ~/exercises/operator/handlers.py
+command: INGRESS_SUFFIX={{session_namespace}}.{{ingress_domain}} ~/operator-venv/bin/kopf run --verbose --all-namespaces ~/exercises/operator/handlers.py
 ```
 
 With the custom resource definition registered and the operator running, to create the deployment of the Jupyter notebook instance, as with any Kubernetes resource you would run:

@@ -243,8 +243,8 @@ def create(name, uid, namespace, spec, logger, **_):
     service_resource = K8SService(api, service_body)
     service_resource.create()
 
-    ingress_domain = os.environ.get("INGRESS_DOMAIN")
-    ingress_hostname = f"notebook-{namespace}.{ingress_domain}"
+    ingress_suffix = os.environ.get("INGRESS_SUFFIX")
+    ingress_hostname = f"notebook-{ingress_suffix}"
 
     ingress_body = {
         "apiVersion": "networking.k8s.io/v1",

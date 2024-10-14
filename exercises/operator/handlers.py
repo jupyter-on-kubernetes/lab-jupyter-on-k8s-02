@@ -135,7 +135,8 @@ def create(name, uid, namespace, spec, logger, **_):
                         }
                     ],
                     "securityContext": {
-                        "fsGroup": 0
+                        "runAsUser": 1000,
+                        "fsGroup": 100
                     },
                     "volumes": [
                         {

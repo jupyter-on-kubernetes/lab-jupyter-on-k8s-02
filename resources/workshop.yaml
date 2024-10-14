@@ -26,8 +26,6 @@ spec:
         enabled: true
       vcluster:
         enabled: true
-        ingress:
-          enabled: true
     dashboards:
     - name: Operator
       url: terminal:operator

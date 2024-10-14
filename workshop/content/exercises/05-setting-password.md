@@ -76,7 +76,7 @@ command from a terminal within the Jupyter notebook web interface to change the 
 Note that in shutting down and restarting the Jupyter notebook the browser window or tab may vanish so you will need to access the URL for the Jupyter notebook instance again.
 
 ```dashboard:open-url
-url: http://notebook-default.{{session_namespace}}.{{ingress_domain}}
+url: http://notebook-{{session_namespace}}.{{ingress_domain}}
 ```
 
 This mechanism thus allows a user to change the password if they desire from the Jupyter notebook web interface and it is not necessary to update the config map. The user will need to remember the password though, since that recorded in the custom resource will no longer be valid. If forgotten, a cluster admin could access the container and run ``jupyter server password`` to set a temporary password so the user could gain access once more, with the user then setting the password themselves to something only they know.

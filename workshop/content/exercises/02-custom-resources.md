@@ -71,7 +71,7 @@ kubectl rollout status deployment/notebook
 Once the deployment has completed, the Jupyter notebook will be available at:
 
 ```dashboard:open-url
-url: http://notebook-default.{{session_namespace}}.{{ingress_domain}}
+url: http://notebook{{session_namespace}}.{{ingress_domain}}
 ```
 
 Access to the Jupyter notebook will still be gated by a password, but this time a unique password will be generated for each deployment.
@@ -86,7 +86,7 @@ You should see output similar to:
 
 ```
 NAME       URL                                                   PASSWORD
-notebook   http://notebook-default.{{session_namespace}}.{{ingress_domain}}  aAbBcCdDeEfFgGhH
+notebook   http://notebook-{{session_namespace}}.{{ingress_domain}}  aAbBcCdDeEfFgGhH
 ```
 
 You will need to copy the password from the terminal and paste it into the login page of the Jupyter notebook.

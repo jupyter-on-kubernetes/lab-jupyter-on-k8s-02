@@ -7,7 +7,7 @@ metadata:
 data:
   jupyter_server_config.json: |-
     {
-      "ServerApp": {
-        "password": "argon2:$argon2id$v=19$m=10240,t=10,p=8$OCz4NRN9RNJQqPKQCx5OyQ$YogG0k+sxOe8LohqEzAQuUS/voP1xQY5aTH2oNG/LGs"
+      "IdentityProvider": {
+        "hashed_password": "argon2:$argon2id$v=19$m=10240,t=10,p=8$nASioQSh/HSW9xH+e4cJxQ$MIDOSN4q1E8kcXohx6DlnllST0tFa223YVnm8bfpn6o"
       }
     }

@@ -30,9 +30,9 @@ if [ ! -f $HOME/.jupyter/jupyter_server_config.json ]; then
     mkdir -p $HOME/.jupyter
     cat > $HOME/.jupyter/jupyter_server_config.json << 'EOF'
 {
-  "ServerApp": {
-    "password": "argon2:%(password_hash)s"
-  }
+    "IdentityProvider": {
+        "hashed_password": "argon2:%(password_hash)s"
+    }
 }
 EOF
 fi

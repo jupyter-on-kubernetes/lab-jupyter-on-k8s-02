@@ -32,9 +32,9 @@ if [ ! -f $HOME/.jupyter/jupyter_server_config.json ]; then
     mkdir -p $HOME/.jupyter
     cat > $HOME/.jupyter/jupyter_server_config.json << 'EOF'
 {
-  "ServerApp": {
-    "password": "argon2:$argon2id$v=19$m=65536,t=3,p=4$da41BmCsFWJMybk3xrh3bg$t9i7RZO4ubrc6nya1J/NEj4zPzRqJdDfl5ydOMwcUSQ"
-  }
+    "IdentityProvider": {
+        "hashed_password": "argon2:$argon2id$v=19$m=10240,t=10,p=8$nASioQSh/HSW9xH+e4cJxQ$MIDOSN4q1E8kcXohx6DlnllST0tFa223YVnm8bfpn6o"
+    }
 }
 EOF
 fi
@@ -55,9 +55,9 @@ if [ ! -f $HOME/.jupyter/jupyter_server_config.json ]; then
     mkdir -p $HOME/.jupyter
     cat > $HOME/.jupyter/jupyter_server_config.json << 'EOF'
 {
-  "ServerApp": {
-    "password": "argon2:$argon2id$v=19$m=65536,t=3,p=4$da41BmCsFWJMybk3xrh3bg$t9i7RZO4ubrc6nya1J/NEj4zPzRqJdDfl5ydOMwcUSQ"
-  }
+    "IdentityProvider": {
+        "hashed_password": "argon2:$argon2id$v=19$m=10240,t=10,p=8$nASioQSh/HSW9xH+e4cJxQ$MIDOSN4q1E8kcXohx6DlnllST0tFa223YVnm8bfpn6o"
+    }
 }
 EOF
 fi

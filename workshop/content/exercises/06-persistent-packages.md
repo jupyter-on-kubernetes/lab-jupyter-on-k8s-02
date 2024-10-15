@@ -28,13 +28,28 @@ In order to have the Python virtual environment created under the home directory
 
 Subsequently, if the Python virtual environment directory ``$HOME/.conda/envs/workspace`` existed, this would be activated before starting up the Jupyter notebook.
 
-Initially the Python virtual environment named ``workspace`` would not exist and thus any installed packages would be lost as the base environment would be used. If the user did want to have any additional Python packages installed and had a sufficiently large persistent volume, they could opt in by creating the ``workspace`` environment. This would be done by creating a terminal from the Jupyter notebook web interface and running:
+Initially the Python virtual environment named ``workspace`` would not exist and thus any installed packages would be lost as the base environment would be used. If the user did want to have any additional Python packages installed and had a sufficiently large persistent volume, they could opt in by creating the ``workspace`` environment. This can be done by creating a terminal from the Jupyter notebook web interface and running:
 
 ```copy
 conda create --name workspace --clone base
 ```
 
-To have the Jupyter notebook use this environment, the Jupyter notebook would be shutdown from the web interface. This will cause the container to be stopped and restarted. When it restarts, as the directory ``$HOME/.conda/envs/workspace`` now exists, that environment would be activated and used. Any packages that are now subsequently installed, will be stored in the persistent volume mounted into the container and will be retained if the Jupyter notebook container were ever restarted.
+Some suggest cloning the base environment is not recommended, and some suggest instead using:
+
+```copy
+conda create --name workspace anaconda
+```
+
+or:
+
+```copy
+conda env export --name base > workspace-environment.yml
+conda env create --name workspace --file workspace-environment.yml
+```
+
+Either way, using ``conda create`` to clone the base environment can require rediculous amounts of memory (>4Gi), so these commands will likely fail in this workshop environment.
+
+If you can get the base environment cloned as the ``workspace`` environment, to have the Jupyter notebook use this environment, the Jupyter notebook would be shutdown from the web interface. This will cause the container to be stopped and restarted. When it restarts, as the directory ``$HOME/.conda/envs/workspace`` now exists, that environment would be activated and used. Any packages that are now subsequently installed, will be stored in the persistent volume mounted into the container and will be retained if the Jupyter notebook container were ever restarted.
 
 That link again for the Jupyter notebook if the browser window or tab is also deleted is:
 
